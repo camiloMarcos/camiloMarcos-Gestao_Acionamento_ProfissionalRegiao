@@ -24,6 +24,7 @@ public class ProfissionalController {
 
     @GetMapping
     public ResponseEntity<List<ProfissionalDTO>> findAll() {
+
         List<Profissional> list = profissionalService.findAll();
         List<ProfissionalDTO> listDto = new ArrayList<>();
         for (Profissional p : list) {
@@ -31,6 +32,7 @@ public class ProfissionalController {
         }
         return ResponseEntity.ok().body(listDto);
     }
+
 
     @GetMapping("/{id}")
     public ResponseEntity<ProfissionalDTO> findById(@PathVariable Integer id) {

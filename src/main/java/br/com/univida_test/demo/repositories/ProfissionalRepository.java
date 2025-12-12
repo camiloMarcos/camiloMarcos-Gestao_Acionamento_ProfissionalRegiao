@@ -8,5 +8,6 @@ import java.util.Optional;
 
 @Repository
 public interface ProfissionalRepository extends JpaRepository<Profissional, Integer> {
+
     Optional<Profissional> findByNomeIgnoreCaseContaining(String nome);
 }
