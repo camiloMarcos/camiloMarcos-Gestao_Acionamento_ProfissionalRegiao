@@ -1,5 +1,6 @@
 package br.com.univida_test.demo.models;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 
@@ -16,6 +17,7 @@ public class Bairro {
     private String cidade;
     private boolean perigo_Distante;
 
+    @JsonIgnore
     @ManyToMany
     @JoinTable(
             name = "bairro_profissional",

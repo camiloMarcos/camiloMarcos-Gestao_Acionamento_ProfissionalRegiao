@@ -2,19 +2,43 @@ package br.com.univida_test.demo.dtos;
 
 import br.com.univida_test.demo.models.Bairro;
 import jakarta.persistence.*;
+import jakarta.validation.constraints.Email;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.Pattern;
+import jakarta.validation.constraints.Size;
+import lombok.NonNull;
 
 import java.util.List;
 
 public class ProfissionalDTO {
 
-        private Integer id;
-        private String nome;
-        private String especialidade;
-        private String numeroConselho;
-        private String telefone;
-        private String email;
-        private String endereco;
-        private String cidade;
+    private Integer id;
+    @NotBlank
+    @Size(min = 3, max = 150)
+    private String nome;
+    @NotBlank
+    @Size(min = 3, max = 50)
+    private String especialidade;
+
+    @NotBlank
+    @Size(min = 3, max = 20)
+    private String numeroConselho;
+
+    @NotBlank
+    @Pattern( regexp = "^\\(?\\d{2}\\)?\\s?9\\d{4}-?\\d{4}$",  message = "Telefone inválido")
+    private String telefone;
+
+    @NotBlank
+    @Email(message = "E-mail inválido")
+    private String email;
+
+    @NotBlank
+    @Size(min = 3, max = 200)
+    private String endereco;
+
+    @NotBlank
+    @Size(min = 3, max = 100)
+    private String cidade;
 
 
         private List<Bairro> bairrosAtendidos;

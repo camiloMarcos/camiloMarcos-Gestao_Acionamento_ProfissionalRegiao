@@ -41,7 +41,7 @@ public class GlobalException {
         return ResponseEntity.status(HttpStatus.NOT_FOUND).body(se);
     }
 
-    //FAZER O TREATMENT PARA MethodArgumentNotValidException -> AULA DE VALIDAÇÃO
+    //FAZER O TRATAMENTO PARA MethodArgumentNotValidException -> AULA DE VALIDAÇÃO
 
 
 

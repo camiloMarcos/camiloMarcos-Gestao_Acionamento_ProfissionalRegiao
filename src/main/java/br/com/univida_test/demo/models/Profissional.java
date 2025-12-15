@@ -1,5 +1,6 @@
 package br.com.univida_test.demo.models;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 
@@ -20,14 +21,16 @@ public class Profissional {
     private String endereco;
     private String cidade;
 
+    @JsonIgnore
     @ManyToMany(mappedBy = "profissionais")
     private List<Bairro> bairrosAtendidos = new ArrayList<>();
 
     public Profissional() {
     }
 
+
     public Profissional(Integer id, String nome, String especialidade, String numeroConselho,
-                        String telefone, String email, String endereco, String cidade, List<Bairro> bairrosAtendidos) {
+                            String telefone, String email, String endereco, String cidade, List<Bairro> bairrosAtendidos) {
         this.id = id;
         this.nome = nome;
         this.especialidade = especialidade;
