@@ -1,7 +1,9 @@
 package br.com.univida_test.demo.models;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Entity
@@ -15,10 +17,11 @@ public class Bairro {
     private boolean perigo_Distante;
 
     @ManyToMany
-    @JoinTable(name = "bairro_profissional",
+    @JoinTable(
+            name = "bairro_profissional",
             joinColumns = @JoinColumn(name = "bairro_id"),
             inverseJoinColumns = @JoinColumn(name = "profissional_id"))
-    private List<Profissional> profissionais;
+    private List<Profissional> profissionais = new ArrayList<>();
 
 // Construtores
     public Bairro(){
@@ -70,6 +73,16 @@ public class Bairro {
     public void setProfissionais(List<Profissional> profissionais) {
         this.profissionais = profissionais;
     }
+
+
+    // Métodos para dicionar profissional ao bairro
+
+    public void addProfissional(Profissional profissional) {
+        this.profissionais.add(profissional);
+        profissional.getBairrosAtendidos().add(this);
+    }
+
+
 }
 
 

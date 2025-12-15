@@ -1,7 +1,9 @@
 package br.com.univida_test.demo.models;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Entity
@@ -19,7 +21,7 @@ public class Profissional {
     private String cidade;
 
     @ManyToMany(mappedBy = "profissionais")
-    private List<Bairro> bairrosAtendidos;
+    private List<Bairro> bairrosAtendidos = new ArrayList<>();
 
     public Profissional() {
     }
@@ -99,4 +101,12 @@ public class Profissional {
     public void setBairrosAtendidos(List<Bairro> bairrosAtendidos) {
         this.bairrosAtendidos = bairrosAtendidos;
     }
+
+   // Métodos para adicionar bairro ao profissional
+
+    public void addBairro(Bairro bairro) {
+        this.bairrosAtendidos.add(bairro);
+        bairro.getProfissionais().add(this);
+    }
+
 }

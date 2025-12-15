@@ -9,6 +9,7 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.stereotype.Service;
 
 import java.lang.reflect.Array;
+import java.util.ArrayList;
 import java.util.Arrays;
 
 
@@ -23,24 +24,56 @@ public class DBService {
 
     public void instanciaDB() {
 
-        Bairro bairro1 = new Bairro (null, "Rio Doce","Olinda", true);
-        Bairro bairro2 = new Bairro (null, "Centro","Recife", true);
-        Bairro bairro3 = new Bairro (null, "Boa Viagem","Recife", false);
+        // Cria profissionais já com a lista de bairros inicializada
+        Profissional prof1 = new Profissional(null, "Marisa Monte", "Geral", "777777777", "7777777",
+                "marisamonte@gmail.com", "Rua do Céu, 177", "Recife", new ArrayList<>());
 
-        Profissional prof1 = new Profissional(null, "Marisa Monte ", "Geral", "777777777","7777777",
-                "marisamonte@gmail.com", "rua do céu, 107.","Recife",Arrays.asList(bairro2,bairro3));
-        Profissional prof2 = new Profissional(null, "Maria Bthânia", "PED", "88888888887","888888",
-                "mariabethania@hotmail.com", "rua do paraiso, 108.","Olinda", null);
+        Profissional prof2 = new Profissional(null, "Maria Bthânia", "PED", "88888888888", "888888",
+                "mariabethania@hotmail.com", "Rua do Paraíso, 188", "Olinda", new ArrayList<>());
 
-      //  bairro2.getProfissionais().addAll(Arrays.asList(prof1));
+        // S@lva profission@is primeiro
+        profissionalRepository.saveAll(Arrays.asList(prof1, prof2));
 
-       // prof2.getBairrosAtendidos().addAll(Arrays.asList(bairro1, bairro3));
+        // Cria b@irros
+        Bairro bairro1 = new Bairro(null, "Rio Doce", "Olinda", true);
+        Bairro bairro2 = new Bairro(null, "Centro", "Recife", true);
+        Bairro bairro3 = new Bairro(null, "Boa Viagem", "Recife", false);
 
+        // Associações bidirecionais usando métodos auxiliares
+        bairro1.addProfissional(prof2); // bairro1 <-> prof2
+        bairro2.addProfissional(prof1); // bairro2 <-> prof1
+        bairro3.addProfissional(prof1); // bairro3 <-> prof1
 
+        // Salva bairros com as associações
         bairroRepository.saveAll(Arrays.asList(bairro1, bairro2, bairro3));
-        profissionalRepository.saveAll(Arrays.asList(prof1));
-
-
     }
-
 }
+
+
+
+ //       Bairro bairro1 = new Bairro (null, "Rio Doce","Olinda", true);
+//        Bairro bairro2 = new Bairro (null, "Centro","Recife", true);
+//        Bairro bairro3 = new Bairro (null, "Boa Viagem","Recife", false);
+
+
+
+
+
+  //      Profissional prof1 = new Profissional(null, "Marisa Monte ", "Geral", "777777777","7777777",
+  //              "marisamonte@gmail.com", "rua do céu, 177.","Recife", new ArrayList<>());
+
+    //    Profissional prof2 = new Profissional(null, "Maria Bthânia", "PED", "88888888888","888888",
+    //            "mariabethania@hotmail.com", "rua do paraiso, 188.","Olinda", new ArrayList<>());
+
+
+    //    bairro1.addProfissional(prof2);
+      //  bairro2.addProfissional(prof1);
+      //  bairro3.addProfissional(prof1);
+
+
+       // profissionalRepository.saveAll(Arrays.asList(prof1, prof2));
+       // bairroRepository.saveAll(Arrays.asList(bairro1, bairro2, bairro3));
+
+
+
+
