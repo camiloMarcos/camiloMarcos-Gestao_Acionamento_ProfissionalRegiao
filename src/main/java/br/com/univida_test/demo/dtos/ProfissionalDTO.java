@@ -1,43 +1,44 @@
 package br.com.univida_test.demo.dtos;
 
+import java.util.List;
+
 import br.com.univida_test.demo.models.Bairro;
-import jakarta.persistence.*;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Pattern;
 import jakarta.validation.constraints.Size;
-import lombok.NonNull;
 
-import java.util.List;
 
 public class ProfissionalDTO {
 
     private Integer id;
-    @NotBlank
-    @Size(min = 3, max = 150)
-    private String nome;
-    @NotBlank
-    @Size(min = 3, max = 50)
+
+   @NotBlank(message = "Nome é obrigatório")
+   @Size(min = 3, max = 150, message = "Nome deve ter entre 3 e 150 caracteres.")
+   private String nome;
+    
+    @NotBlank (message = "Especialidade é obrigatória")
+    @Size(min = 3, max = 50, message = "Especialidade deve ter entre 3 e 50 caracteres.")
     private String especialidade;
 
-    @NotBlank
-    @Size(min = 3, max = 20)
+    @NotBlank(message = "Número do conselho é obrigatório")
+    @Size(min = 3, max = 20, message = "Número do conselho deve ter entre 3 e 20 caracteres.")
     private String numeroConselho;
 
-    @NotBlank
+    @NotBlank(message = "Telefone é obrigatório")
     @Pattern( regexp = "^\\(?\\d{2}\\)?\\s?9\\d{4}-?\\d{4}$",  message = "Telefone inválido")
     private String telefone;
 
-    @NotBlank
+    @NotBlank(message = "E-mail é obrigatório")
     @Email(message = "E-mail inválido")
     private String email;
 
     @NotBlank
-    @Size(min = 3, max = 200)
+    @Size(min = 3, max = 200, message = "Endereço deve ter entre 3 e 200 caracteres.")
     private String endereco;
 
-    @NotBlank
-    @Size(min = 3, max = 100)
+    @NotBlank(message = "Cidade é obrigatória")
+    @Size(min = 3, max = 100, message = "Cidade deve ter entre 3 e 100 caracteres.")
     private String cidade;
 
 

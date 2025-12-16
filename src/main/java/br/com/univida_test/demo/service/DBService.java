@@ -1,16 +1,15 @@
 package br.com.univida_test.demo.service;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
 import br.com.univida_test.demo.models.Bairro;
 import br.com.univida_test.demo.models.Profissional;
 import br.com.univida_test.demo.repositories.BairroRepository;
 import br.com.univida_test.demo.repositories.ProfissionalRepository;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.Configuration;
-import org.springframework.stereotype.Service;
-
-import java.lang.reflect.Array;
-import java.util.ArrayList;
-import java.util.Arrays;
 
 
 @Service

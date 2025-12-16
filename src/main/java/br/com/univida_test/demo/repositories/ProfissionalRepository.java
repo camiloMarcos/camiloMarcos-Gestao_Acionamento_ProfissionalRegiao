@@ -1,13 +1,14 @@
 package br.com.univida_test.demo.repositories;
 
-import br.com.univida_test.demo.models.Profissional;
+import java.util.Optional;
+
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
-import java.util.Optional;
+import br.com.univida_test.demo.models.Profissional;
 
 @Repository
 public interface ProfissionalRepository extends JpaRepository<Profissional, Integer> {
 
-    Optional<Profissional> findByNomeIgnoreCaseContaining(String nome);
+    Optional<Profissional> findByNomeIgnoreCase(String nome);
 }

@@ -9,5 +9,5 @@ import java.util.Optional;
 @Repository
 public interface BairroRepository extends JpaRepository<Bairro, Integer> {
 
-    public Optional<Bairro> findByNomeIgnoreCaseContaining(String nome);
+    public Optional<Bairro> findByNomeIgnoreCase(String nome);
 }

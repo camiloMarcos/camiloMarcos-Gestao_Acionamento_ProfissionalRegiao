@@ -1,16 +1,14 @@
 package br.com.univida_test.demo.service;
 
-import br.com.univida_test.demo.models.Profissional;
-import br.com.univida_test.demo.repositories.ProfissionalRepository;
-import org.hibernate.ObjectNotFoundException;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
-import org.springframework.stereotype.Service;
-import org.springframework.web.server.ResponseStatusException;
-
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.stereotype.Service;
+import br.com.univida_test.demo.models.Profissional;
+import br.com.univida_test.demo.repositories.ProfissionalRepository;
+import br.com.univida_test.demo.exceptions.ObjectNotFoundException;
 
 @Service
 public class ProfissionalService {
@@ -18,21 +16,35 @@ public class ProfissionalService {
     @Autowired
     private ProfissionalRepository profissionalRepository;
 
+
     // Listar todos os profissionais -> se a lista estiver vazia.
     public List<Profissional> findAll() {
-        List<Profissional> list = profissionalRepository.findAll();
-        if (list.isEmpty()) {
-            throw new ObjectNotFoundException(HttpStatus.NOT_FOUND, "Nenhum profissional encontrado");
-        }
-        return list;
+        List<Profissional> listProf = profissionalRepository.findAll();
+        if (listProf.isEmpty()) {
+            throw new ObjectNotFoundException("Nenhum profissional cadastrado");      }
+        return listProf;
     }
+
 
     // Buscar profissional por ID -> se o ID não existir, ele retorna um ObjectNotFoundException.
     public Profissional findById(Integer id) {
-        Optional<Profissional> profissional = profissionalRepository.findById(id);
-                return profissional.orElseThrow(() -> new ObjectNotFoundException(HttpStatus.NOT_FOUND, "Profissional não encontrado com id " + id));
+        if (id == null || id <= 0) {
+            throw new IllegalArgumentException("ID do profissional não pode ser nulo (DEVE SER MAIOR QUE zero)");
+        }
+        return profissionalRepository.findById(id).orElseThrow(() -> new ObjectNotFoundException("Profissional não encontrado com id " + id));
     }
 
+
+    /*public Profissional findById(Integer id) {
+        if (id == null || id <= 0) {
+            throw new IllegalArgumentException("ID do profissional não pode ser nulo (DEVE SER MAIOR QUE zero)");
+        }
+        Optional<Profissional> profissional = profissionalRepository.findById(id);
+        if (!profissional.isPresent()) {
+            throw new ObjectNotFoundException(HttpStatus.NOT_FOUND, "Profissional não encontrado com id " + id);      
+        }
+        return profissional.get();
+    }*/
 
     public Profissional save(Profissional profissional) {
         buscarPorNome(profissional);
@@ -58,9 +70,17 @@ public class ProfissionalService {
 
 
     public void buscarPorNome(Profissional profissional) {
-        Optional<Profissional> prof = profissionalRepository.findByNomeIgnoreCaseContaining(profissional.getNome());
-        if (prof.isPresent() && !prof.get().getId().equals(profissional.getId())) {
-            throw new IllegalArgumentException("Profissional já existente com o nome: " + profissional.getNome());
+        Optional<Profissional> profPorNome = profissionalRepository.findByNomeIgnoreCase(profissional.getNome());
+
+        if (profPorNome.isPresent()){
+            if (!Objects.equals(profPorNome.get().getId(), profissional.getId())){
+
+                throw new IllegalArgumentException("Profissional já existente com o nome: " + profissional.getNome());
+
+            }
+                
+        }
+        
         }
     }
 
@@ -70,4 +90,4 @@ public class ProfissionalService {
     //  }
 
 
-}
+

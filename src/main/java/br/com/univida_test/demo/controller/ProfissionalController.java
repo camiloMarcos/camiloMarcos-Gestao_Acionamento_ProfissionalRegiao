@@ -1,16 +1,23 @@
 package br.com.univida_test.demo.controller;
 
-import br.com.univida_test.demo.models.Profissional;
-import br.com.univida_test.demo.service.ProfissionalService;
+import java.util.ArrayList;
+import java.util.List;
+
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.*;
-import br.com.univida_test.demo.dtos.ProfissionalDTO;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
-import java.util.ArrayList;
-import java.util.List;
+import br.com.univida_test.demo.dtos.ProfissionalDTO;
+import br.com.univida_test.demo.models.Profissional;
+import br.com.univida_test.demo.service.ProfissionalService;
 
 @RestController
 @RequestMapping("/profissional")

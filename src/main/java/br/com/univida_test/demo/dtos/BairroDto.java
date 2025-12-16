@@ -1,26 +1,28 @@
 package br.com.univida_test.demo.dtos;
 
+import java.util.List;
+
 import br.com.univida_test.demo.models.Profissional;
-import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
 
-import java.util.List;
 
 public class BairroDto {
 
+
     private Integer id;
 
-    @NotBlank
+    @NotBlank(message = "Nome é obrigatório")
     @Size(min = 3, max = 100)
     private String nome;
 
-    @NotBlank
+    @NotBlank(message = "Cidade é obrigatória")
     @Size(min = 3, max = 50)
     private String cidade;
 
-    @NotBlank
+    @NotBlank(message = "Perigo Distante é obrigatório")
     private boolean perigo_Distante;
+
 
     private List<Profissional> profissionais;
 
@@ -28,12 +30,14 @@ public class BairroDto {
         public BairroDto(){
         }
 
+
         public BairroDto(Integer id, String nome, String cidade, boolean perigo_Distante) {
             this.id = id;
             this.nome = nome;
             this.cidade = cidade;
             this.perigo_Distante = perigo_Distante;
         }
+
 
     public Integer getId() {
         return id;
