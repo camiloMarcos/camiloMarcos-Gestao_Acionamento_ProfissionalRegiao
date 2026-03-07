@@ -1,0 +1,160 @@
+<div class="dashboard">
+  <!-- Greeting -->
+  <div class="greeting-section">
+    <div class="greeting-text">
+      <h1>{{ saudacao }}, Colaborador! 👋</h1>
+      <p class="greeting-date">{{ dataAtual }}</p>
+    </div>
+  </div>
+
+  <!-- Banner -->
+  <div class="banner">
+    <div class="banner-content">
+      <h2>Painel de Gestão de Acionamento</h2>
+      <p>Gerencie profissionais e bairros de forma eficiente. Acompanhe as associações e cobertura regional.</p>
+    </div>
+    <div class="banner-decoration">
+      <span class="material-icons-outlined">monitor_heart</span>
+    </div>
+  </div>
+
+  <!-- Summary Cards -->
+  <div class="summary-cards">
+    <a routerLink="/profissionais" class="summary-card">
+      <div class="card-icon blue">
+        <span class="material-icons-outlined">people</span>
+      </div>
+      <div class="card-info">
+        <span class="card-label">Profissionais</span>
+        <span class="card-value">{{ totalProfissionais }} cadastrado(s)</span>
+      </div>
+    </a>
+
+    <a routerLink="/bairros" class="summary-card">
+      <div class="card-icon green">
+        <span class="material-icons-outlined">location_on</span>
+      </div>
+      <div class="card-info">
+        <span class="card-label">Bairros</span>
+        <span class="card-value">{{ totalBairros }} cadastrado(s)</span>
+      </div>
+    </a>
+
+    <div class="summary-card">
+      <div class="card-icon orange">
+        <span class="material-icons-outlined">warning</span>
+      </div>
+      <div class="card-info">
+        <span class="card-label">Sem Cobertura</span>
+        <span class="card-value warning-text">{{ bairrosSemProfissional }} bairro(s)</span>
+      </div>
+    </div>
+
+    <div class="summary-card">
+      <div class="card-icon red">
+        <span class="material-icons-outlined">gps_off</span>
+      </div>
+      <div class="card-info">
+        <span class="card-label">Área de Risco</span>
+        <span class="card-value">{{ bairrosPerigosos }} bairro(s)</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- Content Grid -->
+  <div class="content-grid">
+    <!-- Últimos Profissionais -->
+    <div class="content-card">
+      <div class="card-header">
+        <h3>Últimos Profissionais</h3>
+        <a routerLink="/profissionais" class="view-all">Ver todos</a>
+      </div>
+      <div class="card-body">
+        @if (profissionais.length === 0) {
+          <div class="empty-state">
+            <span class="material-icons-outlined">person_off</span>
+            <p>Nenhum profissional cadastrado</p>
+          </div>
+        } @else {
+          <ul class="item-list">
+            @for (prof of profissionais.slice(0, 5); track prof.id) {
+              <li class="item-row">
+                <div class="item-avatar">
+                  <span class="material-icons-outlined">person</span>
+                </div>
+                <div class="item-info">
+                  <span class="item-name">{{ prof.nome }}</span>
+                  <span class="item-detail">{{ prof.especialidade }} · {{ prof.cidade }}</span>
+                </div>
+              </li>
+            }
+          </ul>
+        }
+      </div>
+    </div>
+
+    <!-- Bairros -->
+    <div class="content-card">
+      <div class="card-header">
+        <h3>Bairros Cadastrados</h3>
+        <a routerLink="/bairros" class="view-all">Ver todos</a>
+      </div>
+      <div class="card-body">
+        @if (bairros.length === 0) {
+          <div class="empty-state">
+            <span class="material-icons-outlined">wrong_location</span>
+            <p>Nenhum bairro cadastrado</p>
+          </div>
+        } @else {
+          <ul class="item-list">
+            @for (bairro of bairros.slice(0, 5); track bairro.id) {
+              <li class="item-row">
+                <div class="item-avatar" [class.danger]="bairro.perigoDistante">
+                  <span class="material-icons-outlined">
+                    {{ bairro.perigoDistante ? 'warning' : 'location_on' }}
+                  </span>
+                </div>
+                <div class="item-info">
+                  <span class="item-name">{{ bairro.nome }}</span>
+                  <span class="item-detail">
+                    {{ bairro.cidade }}
+                    @if (bairro.perigoDistante) {
+                      · <span class="tag-danger">Área de risco</span>
+                    }
+                  </span>
+                </div>
+              </li>
+            }
+          </ul>
+        }
+      </div>
+    </div>
+  </div>
+
+  <!-- Especialidades -->
+  <div class="content-card especialidades-section">
+    <div class="card-header">
+      <h3>Profissionais por Especialidade</h3>
+    </div>
+    <div class="card-body">
+      @if (especialidades.length === 0) {
+        <div class="empty-state">
+          <span class="material-icons-outlined">bar_chart</span>
+          <p>Sem dados para exibir</p>
+        </div>
+      } @else {
+        <div class="bar-chart">
+          @for (esp of especialidades; track esp.nome) {
+            <div class="bar-row">
+              <span class="bar-label">{{ esp.nome }}</span>
+              <div class="bar-track">
+                <div class="bar-fill" [style.width.%]="getPercentual(esp.quantidade)"></div>
+              </div>
+              <span class="bar-value">{{ esp.quantidade }}</span>
+            </div>
+          }
+        </div>
+      }
+    </div>
+  </div>
+</div>

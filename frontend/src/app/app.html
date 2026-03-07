@@ -1,0 +1,65 @@
+﻿<!-- Layout Principal - Sidebar + Content -->
+<div class="app-layout" [class.sidebar-collapsed]="sidebarCollapsed">
+  <!-- Sidebar -->
+  <aside class="sidebar">
+    <div class="sidebar-header">
+      <div class="logo-area">
+        <span class="material-icons-outlined logo-icon">hub</span>
+        <span class="logo-text">Gestao Pro</span>
+      </div>
+    </div>
+
+    <nav class="sidebar-nav">
+      <ul>
+        <li>
+          <a routerLink="/" routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}">
+            <span class="material-icons-outlined">dashboard</span>
+            <span class="nav-text">Dashboard</span>
+          </a>
+        </li>
+        <li>
+          <a routerLink="/profissionais" routerLinkActive="active">
+            <span class="material-icons-outlined">people</span>
+            <span class="nav-text">Profissionais</span>
+          </a>
+        </li>
+        <li>
+          <a routerLink="/bairros" routerLinkActive="active">
+            <span class="material-icons-outlined">location_on</span>
+            <span class="nav-text">Bairros</span>
+          </a>
+        </li>
+      </ul>
+    </nav>
+  </aside>
+
+  <!-- Main Content Area -->
+  <div class="main-wrapper">
+    <!-- Top Header -->
+    <header class="top-header">
+      <div class="header-left">
+        <button class="menu-toggle" (click)="toggleSidebar()">
+          <span class="material-icons-outlined">menu</span>
+        </button>
+      </div>
+      <div class="header-right">
+        <button class="header-icon-btn">
+          <span class="material-icons-outlined">notifications</span>
+          <span class="badge">3</span>
+        </button>
+        <button class="header-icon-btn">
+          <span class="material-icons-outlined">dark_mode</span>
+        </button>
+        <div class="user-avatar">
+          <span class="avatar-initials">CO</span>
+          <span class="user-name">Colaborador</span>
+        </div>
+      </div>
+    </header>
+
+    <!-- Page Content -->
+    <main class="page-content">
+      <router-outlet />
+    </main>
+  </div>
+</div>
