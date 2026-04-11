@@ -1,0 +1,38 @@
+version: '3.8'
+
+services:
+  # Serviço 1: Backend Spring Boot
+  backend:
+    image: backend-app:latest
+    build:
+      context: ./camiloMarcos-Gestao_Acionamento_ProfissionalRegiao
+      dockerfile: Dockerfile
+    ports:
+      - "8080:8080"
+    container_name: backend-gestao
+    environment:
+      SPRING_PROFILES_ACTIVE: docker
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8080/bairro"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  # Serviço 2: Frontend Angular
+  frontend:
+    image: frontend-app:latest
+    build:
+      context: ./gestao-profissionais-frontend
+      dockerfile: Dockerfile
+    ports:
+      - "4200:4200"
+    container_name: frontend-gestao
+    depends_on:
+      backend:
+        condition: service_healthy
+    networks:
+      - app-network
+
+networks:
+  app-network:
+    driver: bridge

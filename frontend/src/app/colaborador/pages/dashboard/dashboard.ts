@@ -1,22 +1,8 @@
 import { Component, OnInit, inject } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { RouterLink } from '@angular/router';
-
-interface Profissional {
-  id: number;
-  nome: string;
-  especialidade: string;
-  cidade: string;
-  telefone: string;
-}
-
-interface Bairro {
-  id: number;
-  nome: string;
-  cidade: string;
-  perigoDistante: boolean;
-  profissionais?: Profissional[];
-}
+import { Profissional } from '../../../core/models/profissional.model';
+import { Bairro } from '../../../core/models/bairro.model';
 
 @Component({
   selector: 'app-dashboard',
