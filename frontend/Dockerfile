@@ -21,7 +21,8 @@ RUN npm run build
 FROM nginx:latest
 
 # Copiar arquivos compilados para nginx
-COPY --from=builder /app/dist/gestao-profissionais-frontend /usr/share/nginx/html
+# Angular (builder application) gera em dist/<projeto>/browser
+COPY --from=builder /app/dist/frontend/browser /usr/share/nginx/html
 
 # Copiar configuração nginx
 COPY nginx.conf /etc/nginx/nginx.conf
