@@ -29,6 +29,7 @@ public class ProfissionalController {
     @Autowired
     private ModelMapper modelMapper;
 
+// Buscar todos os Profissionais    
     @GetMapping
     public ResponseEntity<List<ProfissionalDTO>> findAll() {
 
@@ -40,20 +41,20 @@ public class ProfissionalController {
         return ResponseEntity.ok().body(listDto);
     }
 
-
+// Buscar Profissional por ID
     @GetMapping("/{id}")
     public ResponseEntity<ProfissionalDTO> findById(@PathVariable Integer id) {
         Profissional profissional = profissionalService.findById(id);
         return ResponseEntity.ok().body(modelMapper.map(profissional, ProfissionalDTO.class));
     }
-
+// Criar um novo Profissional
     @PostMapping
     public ResponseEntity<ProfissionalDTO> save(@RequestBody ProfissionalDTO profissionalDto) {
         Profissional profissional = modelMapper.map(profissionalDto, Profissional.class);
         Profissional profSave = profissionalService.save(profissional);
         return ResponseEntity.ok().body(modelMapper.map(profSave, ProfissionalDTO.class));
     }
-
+// Atualizar um Profissional existente
     @PutMapping("/{id}")
     public ResponseEntity<ProfissionalDTO> update(@PathVariable Integer id, @RequestBody ProfissionalDTO profissionalDto) {
         profissionalDto.setId(id);
@@ -61,7 +62,7 @@ public class ProfissionalController {
         Profissional updated = profissionalService.update(profissional);
         return ResponseEntity.ok().body(modelMapper.map(updated, ProfissionalDTO.class));
     }
-
+// Deletar um Profissional por ID
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> delete(@PathVariable Integer id) {
         profissionalService.delete(id);

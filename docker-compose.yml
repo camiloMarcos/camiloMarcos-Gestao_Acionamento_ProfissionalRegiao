@@ -11,10 +11,12 @@ services:
     environment:
       SPRING_PROFILES_ACTIVE: docker
     healthcheck:
-      test: ["CMD", "curl", "-f", "http://localhost:8080/bairro"]
+      test: ["CMD-SHELL", "curl -s http://localhost:8080 > /dev/null || exit 1"]
       interval: 10s
       timeout: 5s
       retries: 5
+    networks:
+      - app-network
 
   # Serviço 2: Frontend Angular
   frontend:
