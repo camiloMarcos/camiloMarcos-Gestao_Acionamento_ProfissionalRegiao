@@ -14,6 +14,7 @@
 6. [Docker Compose - Tudo junto](#6-docker-compose)
 7. [Testando e Rodando](#7-testando-e-rodando)
 8. [Troubleshooting](#8-troubleshooting)
+9. [Fazer Manualmente no VS Code](#9-fazer-manualmente-no-vs-code)
 
 ---
 
@@ -167,7 +168,7 @@ docker-compose up
 ### 📂 Estrutura que Você Vai Ter
 
 ```
-camiloMarcos-Gestao_Acionamento_ProfissionalRegiao/
+backend/
 ├── pom.xml
 ├── mvnw
 ├── src/
@@ -181,7 +182,7 @@ Antes de fazer Docker, você precisa compilar seu projeto Spring Boot.
 
 **Abra PowerShell na pasta do backend:**
 ```powershell
-cd C:\Users\marco\OneDrive\Documentos\MeusProjetos\superHome\camiloMarcos-Gestao_Acionamento_ProfissionalRegiao
+cd C:\Users\marco\OneDrive\Documentos\MeusProjetos\superHome\backend
 
 # Compile seu projeto
 mvnw clean package -DskipTests
@@ -200,7 +201,7 @@ mvnw clean package -DskipTests
 
 **Caminho completo:**
 ```
-C:\Users\marco\OneDrive\Documentos\MeusProjetos\superHome\camiloMarcos-Gestao_Acionamento_ProfissionalRegiao\Dockerfile
+C:\Users\marco\OneDrive\Documentos\MeusProjetos\superHome\backend\Dockerfile
 ```
 
 **Conteúdo:**
@@ -290,7 +291,7 @@ docker run -p 8080:8080 backend-app
 ### 📂 Estrutura
 
 ```
-gestao-profissionais-frontend/
+frontend/
 ├── src/
 ├── package.json
 ├── angular.json
@@ -325,7 +326,7 @@ RUN npm run build
 FROM nginx:latest
 
 # Copiar arquivos compilados para nginx
-COPY --from=builder /app/dist/gestao-profissionais-frontend /usr/share/nginx/html
+COPY --from=builder /app/dist/frontend/browser /usr/share/nginx/html
 
 # Copiar configuração nginx (próximo passo)
 COPY nginx.conf /etc/nginx/nginx.conf
@@ -398,7 +399,7 @@ http {
 Se quiser testar agora:
 
 ```powershell
-cd C:\Users\marco\OneDrive\Documentos\MeusProjetos\superHome\gestao-profissionais-frontend
+cd C:\Users\marco\OneDrive\Documentos\MeusProjetos\superHome\frontend
 
 # Build
 docker build -t frontend-app .
@@ -420,10 +421,10 @@ docker run -p 4200:4200 frontend-app
 
 ```
 superHome/
-├── camiloMarcos-Gestao_Acionamento_ProfissionalRegiao/
+├── backend/
 │   ├── Dockerfile
 │   └── src/
-├── gestao-profissionais-frontend/
+├── frontend/
 │   ├── Dockerfile
 │   ├── nginx.conf
 │   └── src/
@@ -445,7 +446,7 @@ services:
     
     # Construir a partir do Dockerfile
     build:
-      context: ./camiloMarcos-Gestao_Acionamento_ProfissionalRegiao
+      context: ./backend
       dockerfile: Dockerfile
     
     # Portas: (porta da máquina):(porta do contêiner)
@@ -471,7 +472,7 @@ services:
     image: frontend-app:latest
     
     build:
-      context: ./gestao-profissionais-frontend
+      context: ./frontend
       dockerfile: Dockerfile
     
     ports:
@@ -747,6 +748,66 @@ healthcheck:
 
 ---
 
+## 9. Fazer Manualmente no VS Code
+
+Se você prefere aprender "na mão", esse é o fluxo mais seguro para renomear pasta sem quebrar o projeto.
+
+### ✅ Objetivo desta seção
+
+Renomear a pasta do backend e atualizar caminhos antigos nos arquivos de configuração e guias.
+
+### 1. Renomear a pasta no terminal
+
+**PowerShell:**
+```powershell
+cd "C:\Users\marco\OneDrive\Documentos\MeusProjetos\superHome"
+Rename-Item -LiteralPath ".\camiloMarcos-Gestao_Acionamento_ProfissionalRegiao" -NewName "backend"
+```
+
+**Git Bash:**
+```bash
+cd ~/OneDrive/Documentos/MeusProjetos/superHome
+mv camiloMarcos-Gestao_Acionamento_ProfissionalRegiao backend
+```
+
+### 2. Buscar nome antigo no VS Code
+
+1. Abra a busca global com `Ctrl + Shift + F`.
+2. Pesquise: `camiloMarcos-Gestao_Acionamento_ProfissionalRegiao`.
+3. Revise os resultados antes de substituir.
+
+### 3. Substituir com segurança
+
+1. Clique na seta para abrir o campo **Substituir**.
+2. Em substituir por, use: `backend`.
+3. Faça primeiro arquivo por arquivo (mais seguro para iniciantes).
+4. Depois, se estiver confortável, use **Substituir tudo**.
+
+### 4. Pontos obrigatórios para conferir
+
+- `docker-compose.yml`:
+  - backend `build.context` deve ser `./backend`
+  - frontend `build.context` deve ser `./frontend`
+- `frontend/Dockerfile`:
+  - cópia do build Angular deve apontar para `dist/frontend/browser`
+
+### 5. Validar em 60 segundos
+
+```powershell
+cd "C:\Users\marco\OneDrive\Documentos\MeusProjetos\superHome"
+docker-compose config
+docker-compose up --build
+```
+
+Teste no navegador:
+
+- `http://localhost:8080/bairro`
+- `http://localhost:4200`
+
+Se os dois abrirem, está correto e organizado.
+
+---
+
 ## 📊 Resumo Visual
 
 ### Seu Projeto Agora:
@@ -842,9 +903,9 @@ environment:
 
 ### Arquivos que Você Criou:
 
-- ✅ `camiloMarcos-Gestao_Acionamento_ProfissionalRegiao/Dockerfile`
-- ✅ `gestao-profissionais-frontend/Dockerfile`
-- ✅ `gestao-profissionais-frontend/nginx.conf`
+- ✅ `backend/Dockerfile`
+- ✅ `frontend/Dockerfile`
+- ✅ `frontend/nginx.conf`
 - ✅ `superHome/docker-compose.yml`
 
 ### Testes Completados:

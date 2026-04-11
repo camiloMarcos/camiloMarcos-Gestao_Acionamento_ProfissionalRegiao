@@ -21,7 +21,7 @@ Se não funcionar, instale: https://www.docker.com/products/docker-desktop
 **Abra PowerShell e execute:**
 
 ```powershell
-cd C:\Users\marco\OneDrive\Documentos\MeusProjetos\superHome\camiloMarcos-Gestao_Acionamento_ProfissionalRegiao
+cd C:\Users\marco\OneDrive\Documentos\MeusProjetos\superHome\backend
 
 mvnw clean package -DskipTests
 ```

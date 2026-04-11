@@ -15,7 +15,7 @@ docker-compose --version
 ### 1️⃣ Compilar o Backend (UMA VEZ)
 
 ```powershell
-cd C:\Users\marco\OneDrive\Documentos\MeusProjetos\superHome\camiloMarcos-Gestao_Acionamento_ProfissionalRegiao
+cd C:\Users\marco\OneDrive\Documentos\MeusProjetos\superHome\backend
 
 mvnw clean package -DskipTests
 
@@ -175,7 +175,7 @@ services:
   backend:
     # ... resto da config
     volumes:
-      - ./camiloMarcos-Gestao_Acionamento_ProfissionalRegiao/src:/app/src
+      - ./backend/src:/app/src
 ```
 
 Mas deixa isso para depois. Primeiro aprende o básico!
