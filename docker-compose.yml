@@ -1,12 +1,10 @@
-version: '3.8'
-
 services:
   # Serviço 1: Backend Spring Boot
   backend:
     image: backend-app:latest
     build:
-      context: ./backend
-      dockerfile: Dockerfile
+      context: .
+      dockerfile: backend/Dockerfile
     ports:
       - "8080:8080"
     container_name: backend-gestao

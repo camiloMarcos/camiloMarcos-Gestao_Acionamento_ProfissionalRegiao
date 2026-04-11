@@ -15,9 +15,9 @@ docker-compose --version
 ### 1️⃣ Compilar o Backend (UMA VEZ)
 
 ```powershell
-cd C:\Users\marco\OneDrive\Documentos\MeusProjetos\superHome\backend
+cd C:\Users\marco\OneDrive\Documentos\MeusProjetos\superHome
 
-mvnw clean package -DskipTests
+\.\mvnw.cmd clean package -DskipTests
 
 # Aguarde... BUILD SUCCESS ✅
 ```
