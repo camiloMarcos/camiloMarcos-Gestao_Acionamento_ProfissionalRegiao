@@ -5,7 +5,7 @@ services:
   backend:
     image: backend-app:latest
     build:
-      context: ./camiloMarcos-Gestao_Acionamento_ProfissionalRegiao
+      context: ./backend
       dockerfile: Dockerfile
     ports:
       - "8080:8080"
@@ -22,7 +22,7 @@ services:
   frontend:
     image: frontend-app:latest
     build:
-      context: ./gestao-profissionais-frontend
+      context: ./frontend
       dockerfile: Dockerfile
     ports:
       - "4200:4200"
