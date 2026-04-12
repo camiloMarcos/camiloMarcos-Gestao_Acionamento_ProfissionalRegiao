@@ -30,6 +30,7 @@ public class BairroController {
     private ModelMapper modelMapper;
 
 
+    // Buscar todos os Bairros
     @GetMapping
     public ResponseEntity<List<BairroDto>> findAll() {
         List<Bairro> list = bairroService.findAll();
@@ -40,7 +41,7 @@ public class BairroController {
         return ResponseEntity.ok().body(listDto);
     }
 
-
+    // Buscar Bairro por ID
     @GetMapping("/{id}")
     public ResponseEntity<BairroDto> findById(@PathVariable Integer id) {
         Bairro bairro = bairroService.findById(id);
@@ -48,6 +49,7 @@ public class BairroController {
     }
 
 
+    // Criar um novo Bairro
     @PostMapping
     public ResponseEntity<BairroDto> save(@RequestBody BairroDto bairroDto) {
         Bairro bairro = modelMapper.map(bairroDto, Bairro.class);
@@ -55,7 +57,7 @@ public class BairroController {
         return ResponseEntity.ok().body(modelMapper.map(sBairro, BairroDto.class));
     }
 
-
+    // Atualizar um Bairro existente
     @PutMapping("/{id}")
     public ResponseEntity<BairroDto> update (@PathVariable Integer id, @RequestBody BairroDto bairroDto) {
          bairroDto.setId(id);
@@ -63,7 +65,7 @@ public class BairroController {
          return ResponseEntity.ok().body(modelMapper.map(bairroUp, BairroDto.class));
         }
 
-
+    // Deletar um Bairro por ID
     @DeleteMapping("/{id}")
         public ResponseEntity<Void> delete (@PathVariable Integer id){
             bairroService.delete(id);

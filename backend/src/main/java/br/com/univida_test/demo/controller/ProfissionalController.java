@@ -41,11 +41,22 @@ public class ProfissionalController {
         return ResponseEntity.ok().body(listDto);
     }
 
-// Buscar Profissional por ID
+    // Buscar Profissional por ID
     @GetMapping("/{id}")
     public ResponseEntity<ProfissionalDTO> findById(@PathVariable Integer id) {
         Profissional profissional = profissionalService.findById(id);
         return ResponseEntity.ok().body(modelMapper.map(profissional, ProfissionalDTO.class));
+    }
+
+    // Buscar Profissional(is) por Bairro ID
+    @GetMapping("/bairro/{bairroId}")
+    public ResponseEntity<List<ProfissionalDTO>> findByBairroId(@PathVariable Integer bairroId) {
+        List<Profissional> list = profissionalService.findByBairroId(bairroId);
+        List<ProfissionalDTO> listDto = new ArrayList<>();
+        for (Profissional p : list) {
+            listDto.add(modelMapper.map(p, ProfissionalDTO.class));
+        }
+        return ResponseEntity.ok().body(listDto);
     }
 // Criar um novo Profissional
     @PostMapping
@@ -66,6 +77,22 @@ public class ProfissionalController {
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> delete(@PathVariable Integer id) {
         profissionalService.delete(id);
+        return ResponseEntity.noContent().build();
+    }
+
+    // Associar um Bairro ao Profissional
+    @PostMapping("/{profissionalId}/bairro/{bairroId}")
+    public ResponseEntity<ProfissionalDTO> adicionarBairroAoProfissional(@PathVariable Integer profissionalId,
+            @PathVariable Integer bairroId) {
+        Profissional profissional = profissionalService.adicionarBairroAoProfissional(profissionalId, bairroId);
+        return ResponseEntity.ok().body(modelMapper.map(profissional, ProfissionalDTO.class));
+    }
+
+    // Remover associação entre Profissional e Bairro
+    @DeleteMapping("/{profissionalId}/bairro/{bairroId}")
+    public ResponseEntity<Void> removerBairroDoProfissional(@PathVariable Integer profissionalId,
+            @PathVariable Integer bairroId) {
+        profissionalService.removerBairroDoProfissional(profissionalId, bairroId);
         return ResponseEntity.noContent().build();
     }
 }

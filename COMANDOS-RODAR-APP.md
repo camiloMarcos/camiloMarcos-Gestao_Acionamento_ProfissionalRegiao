@@ -8,6 +8,13 @@ docker compose build
 docker compose up -d
 ```
 
+Depois que subir, acesse:
+
+- Frontend: http://localhost:4200
+- Backend: http://localhost:8080
+
+Observação: o comando `docker compose up -d` sobe os containers em segundo plano, então o terminal não mostra automaticamente o link do localhost.
+
 ```powershell
 docker compose logs -f backend
 docker compose logs -f frontend

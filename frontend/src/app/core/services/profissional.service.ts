@@ -1,4 +1,4 @@
-import { Injectable, inject } from '@angular/core';
+primeiro import { Injectable, inject } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { Profissional } from '../models/profissional.model';

@@ -32,9 +32,8 @@ public class Profissional {
     public Profissional() {
     }
 
-
     public Profissional(Integer id, String nome, String especialidade, String numeroConselho,
-                            String telefone, String email, String endereco, String cidade, List<Bairro> bairrosAtendidos) {
+            String telefone, String email, String endereco, String cidade, List<Bairro> bairrosAtendidos) {
         this.id = id;
         this.nome = nome;
         this.especialidade = especialidade;
@@ -43,12 +42,13 @@ public class Profissional {
         this.email = email;
         this.endereco = endereco;
         this.cidade = cidade;
-        this.bairrosAtendidos = bairrosAtendidos;
+        this.bairrosAtendidos = bairrosAtendidos != null ? bairrosAtendidos : new ArrayList<>();
     }
 
     public Integer getId() {
         return id;
     }
+
     public void setId(Integer id) {
         this.id = id;
     }
@@ -56,6 +56,7 @@ public class Profissional {
     public String getNome() {
         return nome;
     }
+
     public void setNome(String nome) {
         this.nome = nome;
     }
@@ -63,6 +64,7 @@ public class Profissional {
     public String getEspecialidade() {
         return especialidade;
     }
+
     public void setEspecialidade(String especialidade) {
         this.especialidade = especialidade;
     }
@@ -70,6 +72,7 @@ public class Profissional {
     public String getNumeroConselho() {
         return numeroConselho;
     }
+
     public void setNumeroConselho(String numeroConselho) {
         this.numeroConselho = numeroConselho;
     }
@@ -77,6 +80,7 @@ public class Profissional {
     public String getTelefone() {
         return telefone;
     }
+
     public void setTelefone(String telefone) {
         this.telefone = telefone;
     }
@@ -84,6 +88,7 @@ public class Profissional {
     public String getEmail() {
         return email;
     }
+
     public void setEmail(String email) {
         this.email = email;
     }
@@ -91,6 +96,7 @@ public class Profissional {
     public String getEndereco() {
         return endereco;
     }
+
     public void setEndereco(String endereco) {
         this.endereco = endereco;
     }
@@ -98,6 +104,7 @@ public class Profissional {
     public String getCidade() {
         return cidade;
     }
+
     public void setCidade(String cidade) {
         this.cidade = cidade;
     }
@@ -105,13 +112,20 @@ public class Profissional {
     public List<Bairro> getBairrosAtendidos() {
         return bairrosAtendidos;
     }
+
     public void setBairrosAtendidos(List<Bairro> bairrosAtendidos) {
-        this.bairrosAtendidos = bairrosAtendidos;
+        this.bairrosAtendidos = bairrosAtendidos != null ? bairrosAtendidos : new ArrayList<>();
     }
 
-   // Métodos para adicionar bairro ao profissional
+    // Métodos para adicionar bairro ao profissional
 
     public void addBairro(Bairro bairro) {
+        if (this.bairrosAtendidos == null) {
+            this.bairrosAtendidos = new ArrayList<>();
+        }
+        if (bairro.getProfissionais() == null) {
+            bairro.setProfissionais(new ArrayList<>());
+        }
         this.bairrosAtendidos.add(bairro);
         bairro.getProfissionais().add(this);
     }

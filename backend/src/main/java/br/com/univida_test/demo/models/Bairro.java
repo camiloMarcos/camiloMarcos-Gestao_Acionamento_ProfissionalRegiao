@@ -25,14 +25,11 @@ public class Bairro {
 
     @JsonIgnore
     @ManyToMany
-    @JoinTable(
-            name = "bairro_profissional",
-            joinColumns = @JoinColumn(name = "bairro_id"),
-            inverseJoinColumns = @JoinColumn(name = "profissional_id"))
+    @JoinTable(name = "bairro_profissional", joinColumns = @JoinColumn(name = "bairro_id"), inverseJoinColumns = @JoinColumn(name = "profissional_id"))
     private List<Profissional> profissionais = new ArrayList<>();
 
-// Construtores
-    public Bairro(){
+    // Construtores
+    public Bairro() {
     }
 
     public Bairro(Integer id, String nome, String cidade, boolean perigo_Distante) {
@@ -79,18 +76,20 @@ public class Bairro {
     }
 
     public void setProfissionais(List<Profissional> profissionais) {
-        this.profissionais = profissionais;
+        this.profissionais = profissionais != null ? profissionais : new ArrayList<>();
     }
-
 
     // Métodos para dicionar profissional ao bairro
 
     public void addProfissional(Profissional profissional) {
+        if (this.profissionais == null) {
+            this.profissionais = new ArrayList<>();
+        }
+        if (profissional.getBairrosAtendidos() == null) {
+            profissional.setBairrosAtendidos(new ArrayList<>());
+        }
         this.profissionais.add(profissional);
         profissional.getBairrosAtendidos().add(this);
     }
 
-
 }
-
-
