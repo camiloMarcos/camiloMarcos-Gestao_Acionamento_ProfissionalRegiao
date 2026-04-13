@@ -22,6 +22,9 @@ public class DBService {
 
 
     public void instanciaDB() {
+      if (profissionalRepository.count() > 0 || bairroRepository.count() > 0) {
+        return;
+      }
 
         // Cria profissionais já com a lista de bairros inicializada
         Profissional prof1 = new Profissional(null, "Marisa Monte", "Geral", "777777777", "7777777",

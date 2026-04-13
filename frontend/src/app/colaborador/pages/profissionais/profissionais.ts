@@ -1,7 +1,6 @@
 import { Component, inject } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { ProfissionalService } from '../../../core/services/profissional.service';
-import { BairroService } from '../../../core/services/bairro.service';
 import { Profissional } from '../../../core/models/profissional.model';
 
 type Tela = 'inicio' | 'busca' | 'resultados' | 'formulario' | 'deletar' | 'confirmar-exclusao';
@@ -15,7 +14,6 @@ type TipoBusca = 'todos' | 'id' | 'nome' | 'bairro';
 })
 export class Profissionais {
   private profService = inject(ProfissionalService);
-  private bairroService = inject(BairroService);
 
   // Estado da tela
   telaAtual: Tela = 'inicio';
@@ -127,11 +125,17 @@ export class Profissionais {
 
       case 'bairro':
         if (!this.termoBusca.trim()) {
-          this.mostrarMensagem('Digite o nome do bairro para buscar.', 'erro');
+          this.mostrarMensagem('Digite o ID do bairro para buscar.', 'erro');
           this.carregando = false;
           return;
         }
-        this.bairroService.buscarProfissionaisPorBairroNome(this.termoBusca).subscribe({
+        const bairroId = parseInt(this.termoBusca, 10);
+        if (!bairroId || bairroId <= 0) {
+          this.mostrarMensagem('Digite um ID de bairro valido (numero maior que zero).', 'erro');
+          this.carregando = false;
+          return;
+        }
+        this.profService.buscarPorBairroId(bairroId).subscribe({
           next: (data) => this.tratarResultados(data),
           error: (err) => this.tratarErro(err),
         });

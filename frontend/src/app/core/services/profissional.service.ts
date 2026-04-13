@@ -1,6 +1,6 @@
-primeiro import { Injectable, inject } from '@angular/core';
+import { Injectable, inject } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { Observable } from 'rxjs';
+import { Observable, throwError } from 'rxjs';
 import { Profissional } from '../models/profissional.model';
 
 @Injectable({ providedIn: 'root' })
@@ -16,8 +16,13 @@ export class ProfissionalService {
     return this.http.get<Profissional>(`${this.apiUrl}/${id}`);
   }
 
+  // Pendente: backend ainda nao expoe endpoint de busca por nome.
   buscarPorNome(nome: string): Observable<Profissional[]> {
-    return this.http.get<Profissional[]>(`${this.apiUrl}/nome/${nome}`);
+    return throwError(() => new Error('Busca por nome esta pendente no backend.'));
+  }
+
+  buscarPorBairroId(id: number): Observable<Profissional[]> {
+    return this.http.get<Profissional[]>(`${this.apiUrl}/bairro/${id}`);
   }
 
   salvar(profissional: Profissional): Observable<Profissional> {
