@@ -89,10 +89,19 @@ public class BairroService {
     }
 
 
+    // Buscar bairros por risco/perigo
+    public List<Bairro> findByPerigoso(boolean perigo) {
+        List<Bairro> list = bairroRepository.findByPerigo_Distante(perigo);
+        if (list.isEmpty()) {
+            throw new ObjectNotFoundException("Nenhum bairro encontrado com o status perigo/distante: " + perigo);
+        }
+        return list;
+    }
+
     // Deletar bairro por ID -> valida se o bairro tem profissionais associados, se tiver, ele lança uma DataIntegrityViolationException.
     public void delete(Integer id) {
         Bairro bairroDel = findById(id);
-        if (!bairroDel.getProfissionais().isEmpty() && bairroDel.getProfissionais()!= null) {
+        if (bairroDel.getProfissionais() != null && !bairroDel.getProfissionais().isEmpty()) {
             throw new DataIntegrityViolationException ("Não é possível deletar o bairro com id " + id + " pois ele está associado a profissionais.");
         }
         bairroRepository.delete(bairroDel);
@@ -111,22 +120,8 @@ public class BairroService {
         return listBairros;
     }
 
-
-    // Buscar bairros por risco/perigo
-    public List<Bairro> findByPerigoso(boolean perigo) {
-        List<Bairro> listBairros = bairroRepository.findByPerigo_Distante(perigo);
-        String tipoFiltro = perigo ? "perigosos/distantes" : "seguros";
-        if (listBairros.isEmpty()) {
-            throw new ObjectNotFoundException("Nenhum bairro encontrado nos bairros " + tipoFiltro);
-        }
-        return listBairros;
-    }
-
-
-    // MANTÉM COMPATIBILIDADE: renomear para validarNomeDuplicado
     // Método legado - mantido para compatibilidade (podera ser removido)
     public void buscarPorNome(Bairro bairro) {
         validarNomeDuplicado(bairro);
     }
-
 }
