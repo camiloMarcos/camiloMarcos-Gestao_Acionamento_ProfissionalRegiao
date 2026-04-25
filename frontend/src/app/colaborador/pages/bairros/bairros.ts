@@ -4,7 +4,7 @@ import { BairroService } from '../../../core/services/bairro.service';
 import { Bairro } from '../../../core/models/bairro.model';
 
 type Tela = 'inicio' | 'busca' | 'resultados' | 'formulario' | 'deletar' | 'confirmar-exclusao';
-type TipoBuscaBairro = 'todos' | 'id' | 'nome-exato' | 'nome-parcial' | 'cidade';
+type TipoBuscaBairro = 'todos' | 'id' | 'nome-exato' | 'nome-parcial' | 'cidade' | 'risco' | 'profissional';
 
 @Component({
   selector: 'app-bairros',
@@ -39,12 +39,31 @@ export class Bairros {
   // NAVEGAÇÃO ENTRE TELAS
   // ========================
 
-  irParaBusca() {
+  voltar() {
+    this.limparMensagem();
+    if (this.telaAtual === 'resultados') {
+      this.resultados = [];
+      this.termoBusca = '';
+      this.telaAtual = 'inicio';
+    } else if (this.telaAtual === 'formulario' && this.editando) {
+      this.voltarInicio();
+    } else if (this.telaAtual === 'confirmar-exclusao') {
+      this.telaAtual = 'inicio';
+    } else {
+      this.telaAtual = 'inicio';
+    }
+  }
+
+  resultsParaInicio() {
+    this.voltarInicio();
+  }
+
+  voltarInicio() {
     this.limparMensagem();
     this.resultados = [];
     this.termoBusca = '';
     this.tipoBusca = 'todos';
-    this.telaAtual = 'busca';
+    this.telaAtual = 'inicio';
   }
 
   irParaCriar() {
@@ -61,24 +80,6 @@ export class Bairros {
     this.tipoBusca = 'todos';
     this.bairroParaDeletar = null;
     this.telaAtual = 'deletar';
-  }
-
-  voltar() {
-    this.limparMensagem();
-    if (this.telaAtual === 'resultados') {
-      this.telaAtual = 'busca';
-    } else if (this.telaAtual === 'formulario' && this.editando) {
-      this.telaAtual = 'resultados';
-    } else if (this.telaAtual === 'confirmar-exclusao') {
-      this.telaAtual = 'deletar';
-    } else {
-      this.telaAtual = 'inicio';
-    }
-  }
-
-  voltarInicio() {
-    this.limparMensagem();
-    this.telaAtual = 'inicio';
   }
 
   // ========================
@@ -111,6 +112,8 @@ export class Bairros {
       'nome-exato': () => this.bairroService.buscarPorNomeExato(this.termoBusca),
       'nome-parcial': () => this.bairroService.buscarPorNomeParcial(this.termoBusca),
       'cidade': () => this.bairroService.buscarPorCidade(this.termoBusca),
+      'risco': () => this.bairroService.buscarPorRisco(this.termoBusca === 'perigoso'),
+      'profissional': () => this.bairroService.buscarPorProfissional(parseInt(this.termoBusca, 10)),
     };
 
     operacoes[this.tipoBusca]().subscribe({
@@ -163,6 +166,16 @@ export class Bairros {
       });
     } else if (this.tipoBusca === 'cidade') {
       this.bairroService.buscarPorCidade(this.termoBusca).subscribe({
+        next: (data: any) => this.tratarResultados(data),
+        error: (err: any) => this.tratarErro(err),
+      });
+    } else if (this.tipoBusca === 'risco') {
+      this.bairroService.buscarPorRisco(this.termoBusca === 'perigoso').subscribe({
+        next: (data: any) => this.tratarResultados(data),
+        error: (err: any) => this.tratarErro(err),
+      });
+    } else if (this.tipoBusca === 'profissional') {
+      this.bairroService.buscarPorProfissional(parseInt(this.termoBusca, 10)).subscribe({
         next: (data: any) => this.tratarResultados(data),
         error: (err: any) => this.tratarErro(err),
       });

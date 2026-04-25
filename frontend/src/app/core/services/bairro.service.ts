@@ -33,6 +33,16 @@ export class BairroService {
     return this.http.get<Bairro[]>(`${this.apiUrl}/cidade/${cidade}`);
   }
 
+  // Buscar bairros por risco/perigo
+  buscarPorRisco(perigo: boolean): Observable<Bairro[]> {
+    return this.http.get<Bairro[]>(`${this.apiUrl}/risco/${perigo}`);
+  }
+
+  // Buscar bairros por profissional
+  buscarPorProfissional(profissionalId: number): Observable<Bairro[]> {
+    return this.http.get<Bairro[]>(`${this.apiUrl}/profissional/${profissionalId}`);
+  }
+
   // Criar novo bairro
   criar(bairro: Bairro): Observable<Bairro> {
     return this.http.post<Bairro>(this.apiUrl, bairro);

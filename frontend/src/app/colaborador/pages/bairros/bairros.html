@@ -13,173 +13,153 @@
   }
 
   <!-- =============================== -->
-  <!-- TELA INÍCIO                      -->
+  <!-- BUSCA AVANÇADA (FIXO NO TOPO) -->
   <!-- =============================== -->
-  @if (telaAtual === 'inicio') {
-    <div class="tela-inicio">
-      <div class="page-header">
-        <h1>Gestão de Bairros</h1>
-        <p>Gerencie os bairros cadastrados no sistema.</p>
-      </div>
-
-      <div class="acoes-grid">
-        <button class="acao-card" (click)="irParaBusca()">
-          <div class="acao-icon blue">
-            <span class="material-icons-outlined">search</span>
-          </div>
-          <h3>Buscar Bairro</h3>
-          <p>Pesquise por ID, nome, cidade ou visualize todos os bairros cadastrados.</p>
-        </button>
-
-        <button class="acao-card" (click)="irParaCriar()">
-          <div class="acao-icon green">
-            <span class="material-icons-outlined">location_on</span>
-          </div>
-          <h3>Criar Novo Bairro</h3>
-          <p>Cadastre um novo bairro no sistema.</p>
-        </button>
-
-        <button class="acao-card" (click)="irParaDeletar()">
-          <div class="acao-icon red">
-            <span class="material-icons-outlined">delete_outline</span>
-          </div>
-          <h3>Deletar / Congelar</h3>
-          <p>Exclua permanentemente ou congele um bairro.</p>
-        </button>
-      </div>
+  
+    <div class="page-title">
+      <h1>Gestão de Bairros</h1>
+      <p>Gerencie Bairros e Regiões Assitidas.</p>
     </div>
-  }
 
-  <!-- =============================== -->
-  <!-- TELA BUSCA                       -->
-  <!-- =============================== -->
-  @if (telaAtual === 'busca') {
-    <div class="tela-busca">
-      <div class="page-header">
-        <button class="btn-voltar" (click)="voltarInicio()">
-          <span class="material-icons-outlined">arrow_back</span> Voltar
-        </button>
-        <h1>Buscar Bairro</h1>
-        <p>Selecione o tipo de busca e aplique os filtros desejados.</p>
-      </div>
-
-      <div class="busca-container">
-        <div class="busca-tipo">
-          <label class="radio-option" [class.active]="tipoBusca === 'todos'">
-            <input type="radio" name="tipoBusca" value="todos" [(ngModel)]="tipoBusca" />
-            <span class="material-icons-outlined">list</span> Todos
-          </label>
-          <label class="radio-option" [class.active]="tipoBusca === 'id'">
-            <input type="radio" name="tipoBusca" value="id" [(ngModel)]="tipoBusca" />
-            <span class="material-icons-outlined">tag</span> Por ID
-          </label>
-          <label class="radio-option" [class.active]="tipoBusca === 'nome-exato'">
-            <input type="radio" name="tipoBusca" value="nome-exato" [(ngModel)]="tipoBusca" />
-            <span class="material-icons-outlined">check</span> Nome Exato
-          </label>
-          <label class="radio-option" [class.active]="tipoBusca === 'nome-parcial'">
-            <input type="radio" name="tipoBusca" value="nome-parcial" [(ngModel)]="tipoBusca" />
-            <span class="material-icons-outlined">search</span> Nome (Parcial)
-          </label>
-          <label class="radio-option" [class.active]="tipoBusca === 'cidade'">
-            <input type="radio" name="tipoBusca" value="cidade" [(ngModel)]="tipoBusca" />
-            <span class="material-icons-outlined">location_city</span> Por Cidade
-          </label>
+    <!-- Formulário de Busca-->
+          <!-- Linha 1 -->
+      <div class="search-row">
+        <!-- Todos os Registros -->
+        <div class="search-field group-chip" [class.active]="tipoBusca === 'todos'" (click)="tipoBusca = 'todos'; termoBusca = ''">
+          <span class="material-icons-outlined">list</span>
+          <span>Buscar todos os registros</span>
         </div>
 
-        @if (tipoBusca !== 'todos') {
-          <input
-            class="campo-busca"
-            type="text"
-            [(ngModel)]="termoBusca"
-            [placeholder]="
-              tipoBusca === 'id'
-                ? 'Digite o ID do bairro...'
-                : tipoBusca === 'nome-exato'
-                  ? 'Nome exato (ex: Centro)...'
-                  : tipoBusca === 'nome-parcial'
-                    ? 'Parte do nome (ex: Vila)...'
-                    : 'Nome da cidade...'
-            "
-            (keyup.enter)="executarBusca()"
-          />
-        }
+        <!-- Buscar por ID -->
+        <div class="search-field input-chip" [class.active]="tipoBusca === 'id'">
+          <span class="material-icons-outlined">fingerprint</span>
+          <input type="text" [(ngModel)]="termoBusca" placeholder="Buscar por ID" (focus)="tipoBusca = 'id'" (keyup.enter)="executarBusca()">
+        </div>
 
-        <button class="btn-primario" (click)="executarBusca()" [disabled]="carregando">
+        <!-- Buscar por Nome -->
+        <div class="search-field input-chip" [class.active]="tipoBusca === 'nome-parcial'">
+          <span class="material-icons-outlined">label</span>
+          <input type="text" [(ngModel)]="termoBusca" placeholder="Buscar por nome" (focus)="tipoBusca = 'nome-parcial'" (keyup.enter)="executarBusca()">
+        </div>
+      </div>
+
+      <!-- Linha 2 -->
+      <div class="search-row">
+        <!-- Buscar por Cidade -->
+        <div class="search-field input-chip" [class.active]="tipoBusca === 'cidade'">
+          <span class="material-icons-outlined">location_city</span>
+          <input type="text" [(ngModel)]="termoBusca" placeholder="Bairros por cidade" (focus)="tipoBusca = 'cidade'" (keyup.enter)="executarBusca()">
+        </div>
+
+        <!-- Buscar por Risco -->
+        <div class="search-field select-chip" [class.active]="tipoBusca === 'risco'">
+          <span class="material-icons-outlined">warning</span>
+          <select [(ngModel)]="termoBusca" (focus)="tipoBusca = 'risco'">
+            <option value="">Área de risco...</option>
+            <option value="perigoso">Perigosos / Distantes</option>
+            <option value="seguro">Seguros / Próximos</option>
+          </select>
+        </div>
+
+        <!-- Buscar por Profissional -->
+        <div class="search-field input-chip" [class.active]="tipoBusca === 'profissional'">
+          <span class="material-icons-outlined">person_search</span>
+          <input type="text" [(ngModel)]="termoBusca" placeholder="Por profissional (ID)" (focus)="tipoBusca = 'profissional'" (keyup.enter)="executarBusca()">
+        </div>
+      </div>
+
+      <!-- Botão de Ação -->
+      <div class="search-actions-row">
+        <button class="btn-execute-search" (click)="executarBusca()" [disabled]="carregando">
           @if (carregando) {
-            <span class="spinner"></span> Buscando...
+            <span class="spinner-small"></span>
           } @else {
             <span class="material-icons-outlined">search</span> Buscar
           }
         </button>
+        @if (telaAtual === 'resultados') {
+          <button class="btn-clear-grid" (click)="voltarInicio()">
+            <span class="material-icons-outlined">close</span> Limpar Resultados
+          </button>
+        }
+      </div>
+
+    
+  
+
+  <div class="content-divider"></div>
+
+  <!-- =============================== -->
+  <!-- CONTEÚDO DINÂMICO               -->
+  <!-- =============================== -->
+
+  @if (telaAtual === 'inicio') {
+    <div class="tela-inicio">
+      <div class="acoes-grid">
+        <button class="acao-card-small" (click)="irParaCriar()">
+          <div class="acao-icon green">
+            <span class="material-icons-outlined">location_on</span>
+          </div>
+          <div class="acao-info">
+            <h3>Criar Novo Bairro</h3>
+            <p>Cadastre uma nova região.</p>
+          </div>
+        </button>
+
+        <button class="acao-card-small" (click)="irParaDeletar()">
+          <div class="acao-icon red">
+            <span class="material-icons-outlined">delete_outline</span>
+          </div>
+          <div class="acao-info">
+            <h3>Excluir / Congelar</h3>
+            <p>Gerenciar remoções.</p>
+          </div>
+        </button>
       </div>
     </div>
   }
 
-  <!-- =============================== -->
-  <!-- TELA RESULTADOS                  -->
-  <!-- =============================== -->
-  @if (telaAtual === 'resultados') {
+  @if (resultados.length > 0 && telaAtual === 'resultados') {
     <div class="tela-resultados">
-      <div class="page-header">
-        <button class="btn-voltar" (click)="voltar()">
-          <span class="material-icons-outlined">arrow_back</span> Nova Busca
-        </button>
-        <h1>Resultados da Busca</h1>
-        <p>{{ resultados.length }} bairro(s) encontrado(s).</p>
+      <div class="results-header">
+        <h2>{{ resultados.length }} bairro(s) encontrado(s)</h2>
       </div>
 
-      @if (resultados.length > 0) {
-        <div class="tabela-container">
-          <table class="tabela">
-            <thead>
+      <div class="tabela-container">
+        <table class="tabela">
+          <thead>
+            <tr>
+              <th>ID</th>
+              <th>Nome</th>
+              <th>Cidade</th>
+              <th>Segurança</th>
+              <th>Ações</th>
+            </tr>
+          </thead>
+          <tbody>
+            @for (b of resultados; track b.id) {
               <tr>
-                <th>ID</th>
-                <th>Nome</th>
-                <th>Cidade</th>
-                <th>Risco</th>
-                <th>Ações</th>
+                <td>{{ b.id }}</td>
+                <td><strong>{{ b.nome }}</strong></td>
+                <td>{{ b.cidade }}</td>
+                <td>
+                    <span class="badge" [class.badge-perigo]="b.perigoDistante" [class.badge-seguro]="!b.perigoDistante">
+                      {{ b.perigoDistante ? 'Risco / Distante' : 'Seguro / Próximo' }}
+                  </span>
+                </td>
+                <td class="acoes-celula">
+                  <button class="icon-btn edit" (click)="editarBairro(b)" title="Editar">
+                    <span class="material-icons-outlined">edit</span>
+                  </button>
+                  <button class="icon-btn delete" (click)="selecionarParaDeletar(b)" title="Excluir">
+                    <span class="material-icons-outlined">delete</span>
+                  </button>
+                </td>
               </tr>
-            </thead>
-            <tbody>
-              @for (b of resultados; track b.id) {
-                <tr>
-                  <td>{{ b.id }}</td>
-                  <td><strong>{{ b.nome }}</strong></td>
-                  <td>{{ b.cidade }}</td>
-                  <td>
-                    @if (b.perigoDistante) {
-                      <span class="badge-risco">
-                        <span class="material-icons-outlined">warning</span>
-                        Área de Risco
-                      </span>
-                    } @else {
-                      <span class="badge-seguro">
-                        <span class="material-icons-outlined">check_circle</span>
-                        Seguro
-                      </span>
-                    }
-                  </td>
-                  <td class="acoes-celula">
-                    <button class="btn-acao editar" title="Editar" (click)="editarBairro(b)">
-                      <span class="material-icons-outlined">edit</span>
-                    </button>
-                    <button class="btn-acao deletar" title="Deletar" (click)="selecionarParaDeletar(b)">
-                      <span class="material-icons-outlined">delete</span>
-                    </button>
-                  </td>
-                </tr>
-              }
-            </tbody>
-          </table>
-        </div>
-      } @else {
-        <div class="empty-state">
-          <span class="material-icons-outlined">search_off</span>
-          <p>Nenhum bairro encontrado com os critérios informados.</p>
-          <button class="btn-secundario" (click)="voltar()">Tentar novamente</button>
-        </div>
-      }
+            }
+          </tbody>
+        </table>
+      </div>
     </div>
   }
 
