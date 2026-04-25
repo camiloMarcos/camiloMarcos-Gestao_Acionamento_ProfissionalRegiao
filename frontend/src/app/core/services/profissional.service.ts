@@ -6,7 +6,7 @@ import { Profissional } from '../models/profissional.model';
 @Injectable({ providedIn: 'root' })
 export class ProfissionalService {
   private http = inject(HttpClient);
-  private apiUrl = 'http://localhost:8080/profissional';
+  private apiUrl = '/api/profissional';
 
   buscarTodos(): Observable<Profissional[]> {
     return this.http.get<Profissional[]>(this.apiUrl);
