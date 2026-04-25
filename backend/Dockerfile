@@ -1,4 +1,4 @@
-FROM eclipse-temurin:17-jdk AS build
+FROM eclipse-temurin:21-jdk AS build
 
 WORKDIR /app
 
@@ -8,7 +8,7 @@ COPY backend/src backend/src
 
 RUN chmod +x mvnw && ./mvnw -DskipTests clean package
 
-FROM eclipse-temurin:17-jre-jammy
+FROM eclipse-temurin:21-jre-jammy
 
 WORKDIR /app
 
