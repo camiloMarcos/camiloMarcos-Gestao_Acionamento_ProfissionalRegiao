@@ -13,14 +13,14 @@ public class BairroDto {
     private Integer id;
 
     @NotBlank(message = "Nome é obrigatório")
-    @Size(min = 3, max = 100)
+    @Size(min = 3, max = 100, message = "Nome deve ter entre 3 e 100 caracteres")
     private String nome;
 
     @NotBlank(message = "Cidade é obrigatória")
-    @Size(min = 3, max = 50)
+    @Size(min = 3, max = 50, message = "Cidade deve ter entre 3 e 50 caracteres")
     private String cidade;
 
-    @NotBlank(message = "Perigo Distante é obrigatório")
+    // boolean não precisa de @NotBlank (sempre tem valor padrão false)
     private boolean perigo_Distante;
 
 

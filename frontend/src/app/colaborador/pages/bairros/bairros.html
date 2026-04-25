@@ -1,1 +1,394 @@
-<p>bairros works!</p>
+<div class="bairros">
+  <!-- Mensagem de feedback -->
+  @if (mensagem) {
+    <div class="mensagem" [class]="'mensagem-' + tipoMensagem">
+      <span class="material-icons-outlined">
+        @if (tipoMensagem === 'sucesso') { check_circle }
+        @else if (tipoMensagem === 'erro') { error }
+        @else { info }
+      </span>
+      <span>{{ mensagem }}</span>
+      <button class="fechar-msg" (click)="limparMensagem()">×</button>
+    </div>
+  }
+
+  <!-- =============================== -->
+  <!-- TELA INÍCIO                      -->
+  <!-- =============================== -->
+  @if (telaAtual === 'inicio') {
+    <div class="tela-inicio">
+      <div class="page-header">
+        <h1>Gestão de Bairros</h1>
+        <p>Gerencie os bairros cadastrados no sistema.</p>
+      </div>
+
+      <div class="acoes-grid">
+        <button class="acao-card" (click)="irParaBusca()">
+          <div class="acao-icon blue">
+            <span class="material-icons-outlined">search</span>
+          </div>
+          <h3>Buscar Bairro</h3>
+          <p>Pesquise por ID, nome, cidade ou visualize todos os bairros cadastrados.</p>
+        </button>
+
+        <button class="acao-card" (click)="irParaCriar()">
+          <div class="acao-icon green">
+            <span class="material-icons-outlined">location_on</span>
+          </div>
+          <h3>Criar Novo Bairro</h3>
+          <p>Cadastre um novo bairro no sistema.</p>
+        </button>
+
+        <button class="acao-card" (click)="irParaDeletar()">
+          <div class="acao-icon red">
+            <span class="material-icons-outlined">delete_outline</span>
+          </div>
+          <h3>Deletar / Congelar</h3>
+          <p>Exclua permanentemente ou congele um bairro.</p>
+        </button>
+      </div>
+    </div>
+  }
+
+  <!-- =============================== -->
+  <!-- TELA BUSCA                       -->
+  <!-- =============================== -->
+  @if (telaAtual === 'busca') {
+    <div class="tela-busca">
+      <div class="page-header">
+        <button class="btn-voltar" (click)="voltarInicio()">
+          <span class="material-icons-outlined">arrow_back</span> Voltar
+        </button>
+        <h1>Buscar Bairro</h1>
+        <p>Selecione o tipo de busca e aplique os filtros desejados.</p>
+      </div>
+
+      <div class="busca-container">
+        <div class="busca-tipo">
+          <label class="radio-option" [class.active]="tipoBusca === 'todos'">
+            <input type="radio" name="tipoBusca" value="todos" [(ngModel)]="tipoBusca" />
+            <span class="material-icons-outlined">list</span> Todos
+          </label>
+          <label class="radio-option" [class.active]="tipoBusca === 'id'">
+            <input type="radio" name="tipoBusca" value="id" [(ngModel)]="tipoBusca" />
+            <span class="material-icons-outlined">tag</span> Por ID
+          </label>
+          <label class="radio-option" [class.active]="tipoBusca === 'nome-exato'">
+            <input type="radio" name="tipoBusca" value="nome-exato" [(ngModel)]="tipoBusca" />
+            <span class="material-icons-outlined">check</span> Nome Exato
+          </label>
+          <label class="radio-option" [class.active]="tipoBusca === 'nome-parcial'">
+            <input type="radio" name="tipoBusca" value="nome-parcial" [(ngModel)]="tipoBusca" />
+            <span class="material-icons-outlined">search</span> Nome (Parcial)
+          </label>
+          <label class="radio-option" [class.active]="tipoBusca === 'cidade'">
+            <input type="radio" name="tipoBusca" value="cidade" [(ngModel)]="tipoBusca" />
+            <span class="material-icons-outlined">location_city</span> Por Cidade
+          </label>
+        </div>
+
+        @if (tipoBusca !== 'todos') {
+          <input
+            class="campo-busca"
+            type="text"
+            [(ngModel)]="termoBusca"
+            [placeholder]="
+              tipoBusca === 'id'
+                ? 'Digite o ID do bairro...'
+                : tipoBusca === 'nome-exato'
+                  ? 'Nome exato (ex: Centro)...'
+                  : tipoBusca === 'nome-parcial'
+                    ? 'Parte do nome (ex: Vila)...'
+                    : 'Nome da cidade...'
+            "
+            (keyup.enter)="executarBusca()"
+          />
+        }
+
+        <button class="btn-primario" (click)="executarBusca()" [disabled]="carregando">
+          @if (carregando) {
+            <span class="spinner"></span> Buscando...
+          } @else {
+            <span class="material-icons-outlined">search</span> Buscar
+          }
+        </button>
+      </div>
+    </div>
+  }
+
+  <!-- =============================== -->
+  <!-- TELA RESULTADOS                  -->
+  <!-- =============================== -->
+  @if (telaAtual === 'resultados') {
+    <div class="tela-resultados">
+      <div class="page-header">
+        <button class="btn-voltar" (click)="voltar()">
+          <span class="material-icons-outlined">arrow_back</span> Nova Busca
+        </button>
+        <h1>Resultados da Busca</h1>
+        <p>{{ resultados.length }} bairro(s) encontrado(s).</p>
+      </div>
+
+      @if (resultados.length > 0) {
+        <div class="tabela-container">
+          <table class="tabela">
+            <thead>
+              <tr>
+                <th>ID</th>
+                <th>Nome</th>
+                <th>Cidade</th>
+                <th>Risco</th>
+                <th>Ações</th>
+              </tr>
+            </thead>
+            <tbody>
+              @for (b of resultados; track b.id) {
+                <tr>
+                  <td>{{ b.id }}</td>
+                  <td><strong>{{ b.nome }}</strong></td>
+                  <td>{{ b.cidade }}</td>
+                  <td>
+                    @if (b.perigoDistante) {
+                      <span class="badge-risco">
+                        <span class="material-icons-outlined">warning</span>
+                        Área de Risco
+                      </span>
+                    } @else {
+                      <span class="badge-seguro">
+                        <span class="material-icons-outlined">check_circle</span>
+                        Seguro
+                      </span>
+                    }
+                  </td>
+                  <td class="acoes-celula">
+                    <button class="btn-acao editar" title="Editar" (click)="editarBairro(b)">
+                      <span class="material-icons-outlined">edit</span>
+                    </button>
+                    <button class="btn-acao deletar" title="Deletar" (click)="selecionarParaDeletar(b)">
+                      <span class="material-icons-outlined">delete</span>
+                    </button>
+                  </td>
+                </tr>
+              }
+            </tbody>
+          </table>
+        </div>
+      } @else {
+        <div class="empty-state">
+          <span class="material-icons-outlined">search_off</span>
+          <p>Nenhum bairro encontrado com os critérios informados.</p>
+          <button class="btn-secundario" (click)="voltar()">Tentar novamente</button>
+        </div>
+      }
+    </div>
+  }
+
+  <!-- =============================== -->
+  <!-- TELA FORMULÁRIO (Criar/Editar)   -->
+  <!-- =============================== -->
+  @if (telaAtual === 'formulario') {
+    <div class="tela-formulario">
+      <div class="page-header">
+        <button class="btn-voltar" (click)="descartarAlteracoes()">
+          <span class="material-icons-outlined">arrow_back</span> Voltar
+        </button>
+        <h1>{{ editando ? 'Editar Bairro' : 'Novo Bairro' }}</h1>
+        <p>{{ editando ? 'Altere os dados abaixo e salve.' : 'Preencha os dados abaixo para cadastrar.' }}</p>
+      </div>
+
+      <div class="formulario-card">
+        <div class="form-grid">
+          <div class="form-group">
+            <label for="nome">Nome *</label>
+            <input id="nome" type="text" [(ngModel)]="bairro.nome" placeholder="Nome do bairro" required />
+          </div>
+
+          <div class="form-group">
+            <label for="cidade">Cidade *</label>
+            <input id="cidade" type="text" [(ngModel)]="bairro.cidade" placeholder="Nome da cidade" />
+          </div>
+
+          <div class="form-group" style="grid-column: 1 / -1">
+            <label for="perigo">
+              <input type="checkbox" id="perigo" [(ngModel)]="bairro.perigoDistante" />
+              <span style="margin-left: 8px">Este bairro é uma área de risco?</span>
+            </label>
+          </div>
+        </div>
+
+        <div class="form-acoes">
+          <button class="btn-primario" (click)="salvarBairro()" [disabled]="carregando">
+            @if (carregando) {
+              <span class="spinner"></span> Salvando...
+            } @else {
+              <span class="material-icons-outlined">save</span>
+              {{ editando ? 'Salvar Alterações' : 'Cadastrar Bairro' }}
+            }
+          </button>
+
+          <button class="btn-secundario" (click)="descartarAlteracoes()">
+            <span class="material-icons-outlined">undo</span> Descartar
+          </button>
+
+          @if (editando) {
+            <button class="btn-perigo" (click)="deletarDoFormulario()">
+              <span class="material-icons-outlined">delete</span> Deletar Bairro
+            </button>
+          }
+        </div>
+      </div>
+    </div>
+  }
+
+  <!-- =============================== -->
+  <!-- TELA DELETAR (busca p/ exclusão) -->
+  <!-- =============================== -->
+  @if (telaAtual === 'deletar') {
+    <div class="tela-deletar">
+      <div class="page-header">
+        <button class="btn-voltar" (click)="voltarInicio()">
+          <span class="material-icons-outlined">arrow_back</span> Voltar
+        </button>
+        <h1>Deletar / Congelar Bairro</h1>
+        <p>Encontre o bairro que deseja remover ou desativar.</p>
+      </div>
+
+      <div class="busca-container">
+        <div class="busca-tipo">
+          <label class="radio-option" [class.active]="tipoBusca === 'todos'">
+            <input type="radio" name="tipoBuscaDel" value="todos" [(ngModel)]="tipoBusca" />
+            <span class="material-icons-outlined">list</span> Todos
+          </label>
+          <label class="radio-option" [class.active]="tipoBusca === 'id'">
+            <input type="radio" name="tipoBuscaDel" value="id" [(ngModel)]="tipoBusca" />
+            <span class="material-icons-outlined">tag</span> Por ID
+          </label>
+          <label class="radio-option" [class.active]="tipoBusca === 'nome-exato'">
+            <input type="radio" name="tipoBuscaDel" value="nome-exato" [(ngModel)]="tipoBusca" />
+            <span class="material-icons-outlined">check</span> Nome
+          </label>
+        </div>
+
+        @if (tipoBusca !== 'todos') {
+          <input
+            class="campo-busca"
+            type="text"
+            [(ngModel)]="termoBusca"
+            [placeholder]="tipoBusca === 'id' ? 'Digite o ID...' : 'Digite o nome...'"
+            (keyup.enter)="executarBuscaDeletar()"
+          />
+        }
+
+        <button class="btn-primario" (click)="executarBuscaDeletar()" [disabled]="carregando">
+          @if (carregando) {
+            <span class="spinner"></span> Buscando...
+          } @else {
+            <span class="material-icons-outlined">search</span> Buscar
+          }
+        </button>
+      </div>
+
+      @if (resultados.length > 0) {
+        <div class="tabela-container">
+          <table class="tabela">
+            <thead>
+              <tr>
+                <th>ID</th>
+                <th>Nome</th>
+                <th>Cidade</th>
+                <th>Risco</th>
+                <th>Ação</th>
+              </tr>
+            </thead>
+            <tbody>
+              @for (b of resultados; track b.id) {
+                <tr>
+                  <td>{{ b.id }}</td>
+                  <td><strong>{{ b.nome }}</strong></td>
+                  <td>{{ b.cidade }}</td>
+                  <td>
+                    @if (b.perigoDistante) {
+                      <span class="badge-risco">Risco</span>
+                    } @else {
+                      <span class="badge-seguro">Seguro</span>
+                    }
+                  </td>
+                  <td>
+                    <button class="btn-acao deletar" title="Selecionar" (click)="selecionarParaDeletar(b)">
+                      <span class="material-icons-outlined">arrow_forward</span> Selecionar
+                    </button>
+                  </td>
+                </tr>
+              }
+            </tbody>
+          </table>
+        </div>
+      }
+    </div>
+  }
+
+  <!-- =============================== -->
+  <!-- TELA CONFIRMAR EXCLUSÃO          -->
+  <!-- =============================== -->
+  @if (telaAtual === 'confirmar-exclusao') {
+    <div class="tela-confirmar">
+      <div class="page-header">
+        <button class="btn-voltar" (click)="voltar()">
+          <span class="material-icons-outlined">arrow_back</span> Voltar
+        </button>
+        <h1>Confirmar Ação</h1>
+      </div>
+
+      @if (bairroParaDeletar) {
+        <div class="confirmar-card">
+          <div class="bairro-info-destaque">
+            <div class="bairro-avatar-grande">
+              <span class="material-icons-outlined">location_on</span>
+            </div>
+            <div>
+              <h2>{{ bairroParaDeletar.nome }}</h2>
+              <p>{{ bairroParaDeletar.cidade }}</p>
+              <p class="text-muted">ID: {{ bairroParaDeletar.id }}</p>
+            </div>
+          </div>
+
+          <div class="separador"></div>
+
+          <p class="texto-alerta">O que deseja fazer com este bairro?</p>
+
+          <div class="opcoes-exclusao">
+            <div class="opcao-card excluir">
+              <div class="opcao-header">
+                <span class="material-icons-outlined">delete_forever</span>
+                <h3>Excluir Permanentemente</h3>
+              </div>
+              <p>O bairro será <strong>removido definitivamente</strong> do banco de dados. Esta ação <strong>não pode ser desfeita</strong>.</p>
+              <button class="btn-perigo" (click)="confirmarExclusao()" [disabled]="carregando">
+                @if (carregando) {
+                  <span class="spinner"></span> Excluindo...
+                } @else {
+                  <span class="material-icons-outlined">delete_forever</span> Excluir do Sistema
+                }
+              </button>
+            </div>
+
+            <div class="opcao-card congelar">
+              <div class="opcao-header">
+                <span class="material-icons-outlined">ac_unit</span>
+                <h3>Congelar (Desativar)</h3>
+              </div>
+              <p>O bairro será <strong>desativado temporariamente</strong>, mas seus dados continuam disponíveis no sistema.</p>
+              <button class="btn-congelar" (click)="congelarBairro()">
+                <span class="material-icons-outlined">ac_unit</span> Congelar Bairro
+              </button>
+            </div>
+          </div>
+
+          <button class="btn-secundario btn-cancelar" (click)="voltar()">
+            <span class="material-icons-outlined">close</span> Cancelar e Voltar
+          </button>
+        </div>
+      }
+    </div>
+  }
+</div>
