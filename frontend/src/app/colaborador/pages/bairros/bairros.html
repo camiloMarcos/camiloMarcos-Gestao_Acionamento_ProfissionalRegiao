@@ -22,37 +22,47 @@
     </div>
 
     <!-- Formulário de Busca-->
-          <!-- Linha 1 -->
-      <div class="search-row">
-        <!-- Todos os Registros -->
-        <div class="search-field group-chip" [class.active]="tipoBusca === 'todos'" (click)="tipoBusca = 'todos'; termoBusca = ''">
+    <div class="search-grid">
+      <!-- Todos os Registros -->
+      <div class="search-group" [class.active]="tipoBusca === 'todos'" (click)="tipoBusca = 'todos'; termoBusca = ''">
+        <label>Todos os Registros</label>
+        <div class="search-field chip">
           <span class="material-icons-outlined">list</span>
           <span>Buscar todos os registros</span>
         </div>
+      </div>
 
-        <!-- Buscar por ID -->
-        <div class="search-field input-chip" [class.active]="tipoBusca === 'id'">
+      <!-- Buscar por ID -->
+      <div class="search-group" [class.active]="tipoBusca === 'id'">
+        <label>Buscar por ID</label>
+        <div class="search-field">
           <span class="material-icons-outlined">fingerprint</span>
           <input type="text" [(ngModel)]="termoBusca" placeholder="Buscar por ID" (focus)="tipoBusca = 'id'" (keyup.enter)="executarBusca()">
         </div>
+      </div>
 
-        <!-- Buscar por Nome -->
-        <div class="search-field input-chip" [class.active]="tipoBusca === 'nome-parcial'">
+      <!-- Buscar por Nome -->
+      <div class="search-group" [class.active]="tipoBusca === 'nome-parcial'">
+        <label>Buscar por Nome</label>
+        <div class="search-field">
           <span class="material-icons-outlined">label</span>
           <input type="text" [(ngModel)]="termoBusca" placeholder="Buscar por nome" (focus)="tipoBusca = 'nome-parcial'" (keyup.enter)="executarBusca()">
         </div>
       </div>
 
-      <!-- Linha 2 -->
-      <div class="search-row">
-        <!-- Buscar por Cidade -->
-        <div class="search-field input-chip" [class.active]="tipoBusca === 'cidade'">
+      <!-- Buscar por Cidade -->
+      <div class="search-group" [class.active]="tipoBusca === 'cidade'">
+        <label>Buscar por Cidade</label>
+        <div class="search-field">
           <span class="material-icons-outlined">location_city</span>
           <input type="text" [(ngModel)]="termoBusca" placeholder="Bairros por cidade" (focus)="tipoBusca = 'cidade'" (keyup.enter)="executarBusca()">
         </div>
+      </div>
 
-        <!-- Buscar por Risco -->
-        <div class="search-field select-chip" [class.active]="tipoBusca === 'risco'">
+      <!-- Buscar por Risco -->
+      <div class="search-group" [class.active]="tipoBusca === 'risco'">
+        <label>Buscar por Risco</label>
+        <div class="search-field">
           <span class="material-icons-outlined">warning</span>
           <select [(ngModel)]="termoBusca" (focus)="tipoBusca = 'risco'">
             <option value="">Área de risco...</option>
@@ -60,29 +70,33 @@
             <option value="seguro">Seguros / Próximos</option>
           </select>
         </div>
+      </div>
 
-        <!-- Buscar por Profissional -->
-        <div class="search-field input-chip" [class.active]="tipoBusca === 'profissional'">
+      <!-- Buscar por Profissional -->
+      <div class="search-group" [class.active]="tipoBusca === 'profissional'">
+        <label>Buscar por Profissional</label>
+        <div class="search-field">
           <span class="material-icons-outlined">person_search</span>
           <input type="text" [(ngModel)]="termoBusca" placeholder="Por profissional (ID)" (focus)="tipoBusca = 'profissional'" (keyup.enter)="executarBusca()">
         </div>
       </div>
+    </div>
 
-      <!-- Botão de Ação -->
-      <div class="search-actions-row">
-        <button class="btn-execute-search" (click)="executarBusca()" [disabled]="carregando">
-          @if (carregando) {
-            <span class="spinner-small"></span>
-          } @else {
-            <span class="material-icons-outlined">search</span> Buscar
-          }
-        </button>
-        @if (telaAtual === 'resultados') {
-          <button class="btn-clear-grid" (click)="voltarInicio()">
-            <span class="material-icons-outlined">close</span> Limpar Resultados
-          </button>
+    <!-- Botão de Ação -->
+    <div class="search-actions-row">
+      <button class="btn-execute-search" (click)="executarBusca()" [disabled]="carregando">
+        @if (carregando) {
+          <span class="spinner-small"></span>
+        } @else {
+          <span class="material-icons-outlined">search</span> Buscar
         }
-      </div>
+      </button>
+      @if (telaAtual === 'resultados') {
+        <button class="btn-clear-grid" (click)="voltarInicio()">
+          <span class="material-icons-outlined">close</span> Limpar
+        </button>
+      }
+    </div>
 
     
   
