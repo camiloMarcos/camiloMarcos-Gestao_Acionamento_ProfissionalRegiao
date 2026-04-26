@@ -36,9 +36,11 @@ public class BairroController {
             @RequestParam(required = false) Integer id,
             @RequestParam(required = false) String nome,
             @RequestParam(required = false) String cidade,
-            @RequestParam(required = false) Boolean perigoso) {
+            @RequestParam(required = false) Boolean perigoso,
+            @RequestParam(required = false) Integer profissionalId,
+            @RequestParam(required = false) String profissionalNome) {
         
-        List<Bairro> list = bairroService.findByFiltrosDinamicos(id, nome, cidade, perigoso);
+        List<Bairro> list = bairroService.findByFiltrosDinamicos(id, nome, cidade, perigoso, profissionalId, profissionalNome);
         List<BairroDto> listDto = new ArrayList<>();
         for (Bairro obj : list) {
             listDto.add(modelMapper.map(obj, BairroDto.class));

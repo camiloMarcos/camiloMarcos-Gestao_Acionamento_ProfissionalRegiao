@@ -13,6 +13,7 @@ import org.springframework.stereotype.Service;
 import br.com.univida_test.demo.exceptions.ObjectNotFoundException;
 import br.com.univida_test.demo.models.Bairro;
 import br.com.univida_test.demo.repositories.BairroRepository;
+import jakarta.persistence.criteria.Join;
 import jakarta.persistence.criteria.Predicate;
 
 @Service
@@ -22,7 +23,7 @@ public class BairroService {
     private BairroRepository bairroRepository;
 
     // Buscar bairros dinamicamente com filtros opcionais
-    public List<Bairro> findByFiltrosDinamicos(Integer id, String nome, String cidade, Boolean perigoso) {
+    public List<Bairro> findByFiltrosDinamicos(Integer id, String nome, String cidade, Boolean perigoso, Integer profissionalId, String profissionalNome) {
         Specification<Bairro> spec = (root, query, criteriaBuilder) -> {
             List<Predicate> predicates = new ArrayList<>();
 
@@ -37,6 +38,22 @@ public class BairroService {
             }
             if (perigoso != null) {
                 predicates.add(criteriaBuilder.equal(root.get("perigo_Distante"), perigoso));
+            }
+            
+            // Filtros relacionados ao Profissional
+            if (profissionalId != null || (profissionalNome != null && !profissionalNome.trim().isEmpty())) {
+                Join<Bairro, Object> joinProfissionais = root.join("profissionais");
+                
+                if (profissionalId != null) {
+                    predicates.add(criteriaBuilder.equal(joinProfissionais.get("id"), profissionalId));
+                }
+                
+                if (profissionalNome != null && !profissionalNome.trim().isEmpty()) {
+                    predicates.add(criteriaBuilder.like(
+                        criteriaBuilder.lower(joinProfissionais.get("nome")), 
+                        "%" + profissionalNome.toLowerCase() + "%"
+                    ));
+                }
             }
 
             return criteriaBuilder.and(predicates.toArray(new Predicate[0]));
