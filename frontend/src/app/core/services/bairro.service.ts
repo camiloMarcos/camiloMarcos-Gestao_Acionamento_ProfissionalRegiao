@@ -9,13 +9,21 @@ export class BairroService {
   private apiUrl = '/api/bairro';
 
   // Buscar bairros dinamicamente com filtros combinados (NOVO)
-  buscarDinamico(filtros: { id?: string; nome?: string; cidade?: string; risco?: string; profissional?: string }): Observable<Bairro[]> {
+  buscarDinamico(filtros: { 
+    id?: string; 
+    nome?: string; 
+    cidade?: string; 
+    risco?: string; 
+    profissionalId?: string; 
+    profissionalNome?: string 
+  }): Observable<Bairro[]> {
     let params: any = {};
     if (filtros.id) params.id = filtros.id;
     if (filtros.nome) params.nome = filtros.nome;
     if (filtros.cidade) params.cidade = filtros.cidade;
     if (filtros.risco) params.perigoso = filtros.risco === 'perigoso';
-    // Nota: profissionalId será implementado no backend na próxima iteração se necessário
+    if (filtros.profissionalId) params.profissionalId = filtros.profissionalId;
+    if (filtros.profissionalNome) params.profissionalNome = filtros.profissionalNome;
     
     return this.http.get<Bairro[]>(`${this.apiUrl}/pesquisa`, { params });
   }
