@@ -1,18 +1,19 @@
 package br.com.univida_test.demo.service;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 
 import br.com.univida_test.demo.exceptions.ObjectNotFoundException;
 import br.com.univida_test.demo.models.Bairro;
 import br.com.univida_test.demo.repositories.BairroRepository;
-
-
+import jakarta.persistence.criteria.Predicate;
 
 @Service
 public class BairroService {
@@ -20,6 +21,33 @@ public class BairroService {
     @Autowired
     private BairroRepository bairroRepository;
 
+    // Buscar bairros dinamicamente com filtros opcionais
+    public List<Bairro> findByFiltrosDinamicos(Integer id, String nome, String cidade, Boolean perigoso) {
+        Specification<Bairro> spec = (root, query, criteriaBuilder) -> {
+            List<Predicate> predicates = new ArrayList<>();
+
+            if (id != null) {
+                predicates.add(criteriaBuilder.equal(root.get("id"), id));
+            }
+            if (nome != null && !nome.trim().isEmpty()) {
+                predicates.add(criteriaBuilder.like(criteriaBuilder.lower(root.get("nome")), "%" + nome.toLowerCase() + "%"));
+            }
+            if (cidade != null && !cidade.trim().isEmpty()) {
+                predicates.add(criteriaBuilder.like(criteriaBuilder.lower(root.get("cidade")), "%" + cidade.toLowerCase() + "%"));
+            }
+            if (perigoso != null) {
+                predicates.add(criteriaBuilder.equal(root.get("perigo_Distante"), perigoso));
+            }
+
+            return criteriaBuilder.and(predicates.toArray(new Predicate[0]));
+        };
+
+        List<Bairro> resultados = bairroRepository.findAll(spec);
+        if (resultados.isEmpty()) {
+            throw new ObjectNotFoundException("Nenhum bairro encontrado com os filtros informados.");
+        }
+        return resultados;
+    }
 
     // Buscar todos os bairros.
     public List<Bairro> findAll() {

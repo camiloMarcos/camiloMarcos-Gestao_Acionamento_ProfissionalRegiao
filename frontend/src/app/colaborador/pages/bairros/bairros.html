@@ -37,7 +37,7 @@
         <label>Buscar por ID</label>
         <div class="search-field">
           <span class="material-icons-outlined">fingerprint</span>
-          <input type="text" [(ngModel)]="termoBusca" placeholder="Ex. 20" (focus)="tipoBusca = 'id'" (keyup.enter)="executarBusca()">
+          <input type="text" [(ngModel)]="filtros.id" placeholder="Ex. 20" (focus)="tipoBusca = 'id'" (keyup.enter)="executarBusca()">
         </div>
       </div>
 
@@ -46,7 +46,7 @@
         <label>Buscar por Nome</label>
         <div class="search-field">
           <span class="material-icons-outlined">label</span>
-          <input type="text" [(ngModel)]="termoBusca" placeholder="Ex. Centro" (focus)="tipoBusca = 'nome-parcial'" (keyup.enter)="executarBusca()">
+          <input type="text" [(ngModel)]="filtros.nome" placeholder="Ex. Centro" (focus)="tipoBusca = 'nome-parcial'" (keyup.enter)="executarBusca()">
         </div>
       </div>
 
@@ -55,7 +55,7 @@
         <label>Buscar por Cidade</label>
         <div class="search-field">
           <span class="material-icons-outlined">location_city</span>
-          <input type="text" [(ngModel)]="termoBusca" placeholder="Ex. Olinda" (focus)="tipoBusca = 'cidade'" (keyup.enter)="executarBusca()">
+          <input type="text" [(ngModel)]="filtros.cidade" placeholder="Ex. Olinda" (focus)="tipoBusca = 'cidade'" (keyup.enter)="executarBusca()">
         </div>
       </div>
 
@@ -64,7 +64,7 @@
         <label>Buscar por Risco</label>
         <div class="search-field">
           <span class="material-icons-outlined">warning</span>
-          <select [(ngModel)]="termoBusca" (focus)="tipoBusca = 'risco'">
+          <select [(ngModel)]="filtros.risco" (focus)="tipoBusca = 'risco'">
             <option value="">Área de risco...</option>
             <option value="perigoso">Perigosos / Distantes</option>
             <option value="seguro">Seguros / Próximos</option>
@@ -77,7 +77,7 @@
         <label>Buscar por Profissional</label>
         <div class="search-field">
           <span class="material-icons-outlined">person_search</span>
-          <input type="text" [(ngModel)]="termoBusca" placeholder="Ex. Diego" (focus)="tipoBusca = 'profissional'" (keyup.enter)="executarBusca()">
+          <input type="text" [(ngModel)]="filtros.profissional" placeholder="Ex. Diego" (focus)="tipoBusca = 'profissional'" (keyup.enter)="executarBusca()">
         </div>
       </div>
     </div>
