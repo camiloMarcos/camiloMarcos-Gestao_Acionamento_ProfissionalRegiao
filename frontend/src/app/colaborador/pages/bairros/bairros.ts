@@ -38,7 +38,17 @@ export class Bairros {
 
   tipoBusca: TipoBuscaBairro = 'todos';
   editando = false;
-  termoBusca = '';
+  
+  // Objeto de filtros individualizados para evitar replicação de dados
+  filtros = {
+    id: '',
+    nome: '',
+    cidade: '',
+    risco: '',
+    profissional: ''
+  };
+
+  termoBusca = ''; // Mantido temporariamente para compatibilidade
   bairro: Bairro = this.novoBairro();
   bairroParaDeletar: Bairro | null = null;
 
@@ -69,6 +79,13 @@ export class Bairros {
     this.limparMensagem();
     this.resultados.set([]);
     this.termoBusca = '';
+    this.filtros = {
+      id: '',
+      nome: '',
+      cidade: '',
+      risco: '',
+      profissional: ''
+    };
     this.tipoBusca = 'todos';
     this.telaAtual.set('inicio');
   }
@@ -90,42 +107,18 @@ export class Bairros {
   }
 
   // ========================
-  // LÓGICA DE BUSCA (REATIVA)
+  // LÓGICA DE BUSCA (DINÂMICA)
   // ========================
 
   executarBusca() {
     this.limparMensagem();
-
-    if (this.tipoBusca !== 'todos' && !this.termoBusca.trim()) {
-      this.mostrarMensagem('Digite algo para buscar.', 'erro');
-      return;
-    }
-
-    if (this.tipoBusca === 'id') {
-      const id = parseInt(this.termoBusca, 10);
-      if (!id || id <= 0) {
-        this.mostrarMensagem('Digite um ID válido (número maior que zero).', 'erro');
-        return;
-      }
-    }
-
-    // Ativa o estado de carregamento via Signal
     this.carregando.set(true);
 
-    const operacoes: Record<TipoBuscaBairro, () => any> = {
-      'todos': () => this.bairroService.buscarTodos(),
-      'id': () => this.bairroService.buscarPorId(parseInt(this.termoBusca, 10)),
-      'nome-exato': () => this.bairroService.buscarPorNomeExato(this.termoBusca),
-      'nome-parcial': () => this.bairroService.buscarPorNomeParcial(this.termoBusca),
-      'cidade': () => this.bairroService.buscarPorCidade(this.termoBusca),
-      'risco': () => this.bairroService.buscarPorRisco(this.termoBusca === 'perigoso'),
-      'profissional': () => this.bairroService.buscarPorProfissional(parseInt(this.termoBusca, 10)),
-    };
-
-    operacoes[this.tipoBusca]().subscribe({
-      next: (data: any) => {
-        // Atualização atômica dos estados após retorno do Java
-        this.resultados.set(Array.isArray(data) ? data : [data]);
+    // Na busca dinâmica, enviamos o objeto de filtros completo.
+    // O backend tratará o que foi preenchido.
+    this.bairroService.buscarDinamico(this.filtros).subscribe({
+      next: (data: Bairro[]) => {
+        this.resultados.set(data);
         this.telaAtual.set('resultados');
         this.carregando.set(false);
       },
@@ -133,7 +126,7 @@ export class Bairros {
         this.carregando.set(false);
         const error = err as { error?: { message?: string }; status?: number };
         if (error.status === 404) {
-          this.mostrarMensagem('Nenhum bairro encontrado com os critérios informados.', 'info');
+          this.mostrarMensagem('Nenhum bairro encontrado com os filtros informados.', 'info');
           this.resultados.set([]);
           this.telaAtual.set('resultados');
         } else {

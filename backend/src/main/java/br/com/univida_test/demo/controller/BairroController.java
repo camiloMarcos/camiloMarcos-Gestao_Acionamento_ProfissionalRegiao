@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import br.com.univida_test.demo.dtos.BairroDto;
@@ -29,6 +30,21 @@ public class BairroController {
     @Autowired
     private ModelMapper modelMapper;
 
+    // Busca Dinâmica Unificada
+    @GetMapping("/pesquisa")
+    public ResponseEntity<List<BairroDto>> findDinamico(
+            @RequestParam(required = false) Integer id,
+            @RequestParam(required = false) String nome,
+            @RequestParam(required = false) String cidade,
+            @RequestParam(required = false) Boolean perigoso) {
+        
+        List<Bairro> list = bairroService.findByFiltrosDinamicos(id, nome, cidade, perigoso);
+        List<BairroDto> listDto = new ArrayList<>();
+        for (Bairro obj : list) {
+            listDto.add(modelMapper.map(obj, BairroDto.class));
+        }
+        return ResponseEntity.ok().body(listDto);
+    }
 
     // Buscar todos os Bairros
     @GetMapping
