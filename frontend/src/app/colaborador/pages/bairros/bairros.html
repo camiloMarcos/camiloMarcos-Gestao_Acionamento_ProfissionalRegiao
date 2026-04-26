@@ -24,7 +24,7 @@
     <!-- Formulário de Busca-->
     <div class="search-grid">
       <!-- Todos os Registros -->
-      <div class="search-group" [class.active]="tipoBusca === 'todos'" (click)="tipoBusca = 'todos'; termoBusca = ''">
+      <div class="search-group" [class.active]="tipoBusca === 'todos' && !filtros.id && !filtros.nome && !filtros.cidade && !filtros.risco && !filtros.profissional" (click)="tipoBusca = 'todos'; voltarInicio()">
         <label>
           <span class="material-icons-outlined">list</span>
           Todos os Bairros
@@ -77,7 +77,7 @@
           <select [(ngModel)]="filtros.risco" (focus)="tipoBusca = 'risco'">
             <option value="">Área de risco...</option>
             <option value="perigoso">Perigosos / Distantes</option>
-            <option value="seguro">Seguros / Próximos</option>
+            <option value="seguro">Seguros / Acessíveis</option>
           </select>
         </div>
       </div>

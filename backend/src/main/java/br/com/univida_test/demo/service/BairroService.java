@@ -25,6 +25,7 @@ public class BairroService {
     // Buscar bairros dinamicamente com filtros opcionais
     public List<Bairro> findByFiltrosDinamicos(Integer id, String nome, String cidade, Boolean perigoso, Integer profissionalId, String profissionalNome) {
         Specification<Bairro> spec = (root, query, criteriaBuilder) -> {
+            query.distinct(true);
             List<Predicate> predicates = new ArrayList<>();
 
             if (id != null) {
