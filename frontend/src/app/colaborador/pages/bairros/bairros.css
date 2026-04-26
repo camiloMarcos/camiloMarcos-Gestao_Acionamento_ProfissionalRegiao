@@ -149,12 +149,6 @@
 /* Mantendo destaque sutil no botão de buscar se desejado, 
    mas aqui estamos padronizando conforme a imagem */
 .btn-execute-search {
-  background: #f7fafc; 
-}
-
-.btn-execute-search:active {
-  background: #e2e8f0;
-}
   background: #319795;
   color: white;
   border: none;
@@ -169,6 +163,11 @@
   gap: 8px;
   transition: all 0.2s;
 }
+
+.btn-execute-search:active {
+  background: #287e7c;
+}
+
 
 .btn-execute-search:hover:not(:disabled) {
   background: #287e7c;

@@ -45,7 +45,8 @@ export class Bairros {
     nome: '',
     cidade: '',
     risco: '',
-    profissional: ''
+    profissionalId: '',
+    profissionalNome: ''
   };
 
   termoBusca = ''; // Mantido temporariamente para compatibilidade
@@ -84,7 +85,8 @@ export class Bairros {
       nome: '',
       cidade: '',
       risco: '',
-      profissional: ''
+      profissionalId: '',
+      profissionalNome: ''
     };
     this.tipoBusca = 'todos';
     this.telaAtual.set('inicio');
@@ -175,7 +177,15 @@ export class Bairros {
         error: (err: any) => this.tratarErro(err),
       });
     } else if (this.tipoBusca === 'profissional') {
-      this.bairroService.buscarPorProfissional(parseInt(this.termoBusca, 10)).subscribe({
+      // Método legado de busca simples por Profissional ID
+      const profId = parseInt(this.termoBusca, 10);
+      if (!profId || profId <= 0) {
+        this.mostrarMensagem('Digite um ID de profissional válido.', 'erro');
+        this.carregando.set(false);
+        return;
+      }
+      // Aqui usamos os novos campos no buscarDinamico para manter a consistência
+      this.bairroService.buscarDinamico({ profissionalId: this.termoBusca }).subscribe({
         next: (data: any) => this.tratarResultados(data),
         error: (err: any) => this.tratarErro(err),
       });

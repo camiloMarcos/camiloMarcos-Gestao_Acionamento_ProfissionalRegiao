@@ -82,14 +82,25 @@
         </div>
       </div>
 
-      <!-- Buscar por Profissional -->
+      <!-- Buscar por ID do Profissional -->
+      <div class="search-group" [class.active]="tipoBusca === 'profissional'">
+        <label>
+          <span class="material-icons-outlined">badge</span>
+          ID do Profissional
+        </label>
+        <div class="search-field">
+          <input type="text" [(ngModel)]="filtros.profissionalId" placeholder="Ex. 5" (focus)="tipoBusca = 'profissional'" (keyup.enter)="executarBusca()">
+        </div>
+      </div>
+
+      <!-- Buscar por Nome do Profissional -->
       <div class="search-group" [class.active]="tipoBusca === 'profissional'">
         <label>
           <span class="material-icons-outlined">person_search</span>
-          Buscar por Profissional
+          Nome do Profissional
         </label>
         <div class="search-field">
-          <input type="text" [(ngModel)]="filtros.profissional" placeholder="Ex. Diego" (focus)="tipoBusca = 'profissional'" (keyup.enter)="executarBusca()">
+          <input type="text" [(ngModel)]="filtros.profissionalNome" placeholder="Ex. Diego" (focus)="tipoBusca = 'profissional'" (keyup.enter)="executarBusca()">
         </div>
       </div>
     </div>
