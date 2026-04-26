@@ -24,7 +24,7 @@
     <!-- Formulário de Busca-->
     <div class="search-grid">
       <!-- Todos os Registros -->
-      <div class="search-group" [class.active]="tipoBusca === 'todos' && !filtros.id && !filtros.nome && !filtros.cidade && !filtros.risco && !filtros.profissional" (click)="tipoBusca = 'todos'; voltarInicio()">
+      <div class="search-group" [class.active]="tipoBusca === 'todos' && resultados().length > 0" (click)="tipoBusca = 'todos'; voltarInicio()">
         <label>
           <span class="material-icons-outlined">list</span>
           Todos os Bairros
@@ -86,7 +86,7 @@
       <div class="search-group" [class.active]="tipoBusca === 'profissional'">
         <label>
           <span class="material-icons-outlined">badge</span>
-          ID do Profissional
+          Buscar por Profissional (ID)
         </label>
         <div class="search-field">
           <input type="text" [(ngModel)]="filtros.profissionalId" placeholder="Ex. 5" (focus)="tipoBusca = 'profissional'" (keyup.enter)="executarBusca()">
@@ -97,7 +97,7 @@
       <div class="search-group" [class.active]="tipoBusca === 'profissional'">
         <label>
           <span class="material-icons-outlined">person_search</span>
-          Nome do Profissional
+          Buscar por Profissional
         </label>
         <div class="search-field">
           <input type="text" [(ngModel)]="filtros.profissionalNome" placeholder="Ex. Diego" (focus)="tipoBusca = 'profissional'" (keyup.enter)="executarBusca()">
