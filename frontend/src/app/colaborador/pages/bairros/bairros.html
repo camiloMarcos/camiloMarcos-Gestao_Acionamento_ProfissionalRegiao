@@ -25,45 +25,55 @@
     <div class="search-grid">
       <!-- Todos os Registros -->
       <div class="search-group" [class.active]="tipoBusca === 'todos'" (click)="tipoBusca = 'todos'; termoBusca = ''">
-        <label>Todos os Bairros</label>
-        <div class="search-field chip">
+        <label>
           <span class="material-icons-outlined">list</span>
+          Todos os Bairros
+        </label>
+        <div class="search-field chip">
           <span>Buscar todos</span>
         </div>
       </div>
 
       <!-- Buscar por ID -->
       <div class="search-group" [class.active]="tipoBusca === 'id'">
-        <label>Buscar por ID</label>
-        <div class="search-field">
+        <label>
           <span class="material-icons-outlined">fingerprint</span>
+          Buscar por ID
+        </label>
+        <div class="search-field">
           <input type="text" [(ngModel)]="filtros.id" placeholder="Ex. 20" (focus)="tipoBusca = 'id'" (keyup.enter)="executarBusca()">
         </div>
       </div>
 
       <!-- Buscar por Nome -->
       <div class="search-group" [class.active]="tipoBusca === 'nome-parcial'">
-        <label>Buscar por Nome</label>
-        <div class="search-field">
+        <label>
           <span class="material-icons-outlined">label</span>
+          Buscar por Nome
+        </label>
+        <div class="search-field">
           <input type="text" [(ngModel)]="filtros.nome" placeholder="Ex. Centro" (focus)="tipoBusca = 'nome-parcial'" (keyup.enter)="executarBusca()">
         </div>
       </div>
 
       <!-- Buscar por Cidade -->
       <div class="search-group" [class.active]="tipoBusca === 'cidade'">
-        <label>Buscar por Cidade</label>
-        <div class="search-field">
+        <label>
           <span class="material-icons-outlined">location_city</span>
+          Buscar por Cidade
+        </label>
+        <div class="search-field">
           <input type="text" [(ngModel)]="filtros.cidade" placeholder="Ex. Olinda" (focus)="tipoBusca = 'cidade'" (keyup.enter)="executarBusca()">
         </div>
       </div>
 
       <!-- Buscar por Risco -->
       <div class="search-group" [class.active]="tipoBusca === 'risco'">
-        <label>Buscar por Risco</label>
-        <div class="search-field">
+        <label>
           <span class="material-icons-outlined">warning</span>
+          Buscar por Risco
+        </label>
+        <div class="search-field">
           <select [(ngModel)]="filtros.risco" (focus)="tipoBusca = 'risco'">
             <option value="">Área de risco...</option>
             <option value="perigoso">Perigosos / Distantes</option>
@@ -74,9 +84,11 @@
 
       <!-- Buscar por Profissional -->
       <div class="search-group" [class.active]="tipoBusca === 'profissional'">
-        <label>Buscar por Profissional</label>
-        <div class="search-field">
+        <label>
           <span class="material-icons-outlined">person_search</span>
+          Buscar por Profissional
+        </label>
+        <div class="search-field">
           <input type="text" [(ngModel)]="filtros.profissional" placeholder="Ex. Diego" (focus)="tipoBusca = 'profissional'" (keyup.enter)="executarBusca()">
         </div>
       </div>
@@ -84,18 +96,29 @@
 
     <!-- Botão de Ação -->
     <div class="search-actions-row">
-      <button class="btn-execute-search" (click)="executarBusca()" [disabled]="carregando()">
-        @if (carregando()) {
-          <span class="spinner-small"></span>
-        } @else {
-          <span class="material-icons-outlined">search</span> Buscar
-        }
-      </button>
-      @if (telaAtual() === 'resultados') {
-        <button class="btn-clear-grid" (click)="voltarInicio()">
-          <span class="material-icons-outlined">close</span> Limpar
+      <div class="secondary-actions">
+        <button class="btn-compact secondary" (click)="irParaCriar()">
+          <span class="material-icons-outlined">add_location_alt</span> Criar Novo Bairro
         </button>
-      }
+        <button class="btn-compact secondary" (click)="irParaDeletar()">
+          <span class="material-icons-outlined">delete_sweep</span> Excluir / Congelar
+        </button>
+      </div>
+
+      <div class="main-actions">
+        <button class="btn-execute-search" (click)="executarBusca()" [disabled]="carregando()">
+          @if (carregando()) {
+            <span class="spinner-small"></span>
+          } @else {
+            <span class="material-icons-outlined">search</span> Buscar
+          }
+        </button>
+        @if (telaAtual() === 'resultados') {
+          <button class="btn-clear-grid" (click)="voltarInicio()">
+            <span class="material-icons-outlined">close</span> Limpar
+          </button>
+        }
+      </div>
     </div>
 
     
@@ -106,32 +129,6 @@
   <!-- =============================== -->
   <!-- CONTEÚDO DINÂMICO               -->
   <!-- =============================== -->
-
-  @if (telaAtual() === 'inicio') {
-    <div class="tela-inicio">
-      <div class="acoes-grid">
-        <button class="acao-card-small" (click)="irParaCriar()">
-          <div class="acao-icon green">
-            <span class="material-icons-outlined">location_on</span>
-          </div>
-          <div class="acao-info">
-            <h3>Criar Novo Bairro</h3>
-            <p>Cadastre uma nova região.</p>
-          </div>
-        </button>
-
-        <button class="acao-card-small" (click)="irParaDeletar()">
-          <div class="acao-icon red">
-            <span class="material-icons-outlined">delete_outline</span>
-          </div>
-          <div class="acao-info">
-            <h3>Excluir / Congelar</h3>
-            <p>Gerenciar remoções.</p>
-          </div>
-        </button>
-      </div>
-    </div>
-  }
 
   @if (resultados().length > 0 && telaAtual() === 'resultados') {
     <div class="tela-resultados">
