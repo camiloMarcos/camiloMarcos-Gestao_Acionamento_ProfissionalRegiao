@@ -1,0 +1,65 @@
+<!-- ====================================================== -->
+<!-- COMPONENTE: FORMULÁRIO DE BAIRROS (CADASTRO/EDIÇÃO)    -->
+<!-- RESPONSABILIDADE: Capturar dados do bairro e gerenciar -->
+<!-- as ações de salvamento e cancelamento.                -->
+<!-- ====================================================== -->
+
+<div class="tela-formulario">
+    <!-- Cabeçalho do Formulário com botão de volta rápida -->
+    <div class="page-header">
+      <button class="btn-voltar" (click)="onCancelar()">
+        <span class="material-icons-outlined">arrow_back</span> Voltar
+      </button>
+      <h1>{{ editando ? 'Editar Bairro' : 'Novo Bairro' }}</h1>
+      <p>{{ editando ? 'Altere os dados abaixo e salve.' : 'Preencha os dados abaixo para cadastrar.' }}</p>
+    </div>
+
+    <div class="formulario-card">
+      <div class="form-grid">
+        <!-- Campo: Nome do Bairro -->
+        <div class="form-group">
+          <label for="nome">Nome *</label>
+          <input id="nome" type="text" [(ngModel)]="bairro.nome" placeholder="Nome do bairro" required />
+        </div>
+
+        <!-- Campo: Cidade -->
+        <div class="form-group">
+          <label for="cidade">Cidade *</label>
+          <input id="cidade" type="text" [(ngModel)]="bairro.cidade" placeholder="Nome da cidade" />
+        </div>
+
+        <!-- Campo: Checkbox de Risco (Ocupa a largura total) -->
+        <div class="form-group" style="grid-column: 1 / -1">
+          <label for="perigo" class="checkbox-label">
+            <input type="checkbox" id="perigo" [(ngModel)]="bairro.perigoDistante" />
+            <span style="margin-left: 8px">Este bairro é uma área de risco?</span>
+          </label>
+        </div>
+      </div>
+
+      <!-- Rodapé de Ações do Formulário -->
+      <div class="form-acoes">
+        <!-- Botão Principal: Salvar -->
+        <button class="btn-primario" (click)="onSalvar()" [disabled]="carregando">
+          @if (carregando) {
+            <span class="spinner"></span> Salvando...
+          } @else {
+            <span class="material-icons-outlined">save</span>
+            {{ editando ? 'Salvar Alterações' : 'Cadastrar Bairro' }}
+          }
+        </button>
+
+        <!-- Botão: Descartar -->
+        <button class="btn-secundario" (click)="onCancelar()">
+          <span class="material-icons-outlined">undo</span> Descartar
+        </button>
+
+        <!-- Botão Extra: Deletar (visível apenas em edição) -->
+        @if (editando) {
+          <button class="btn-perigo" (click)="onDeletar()">
+            <span class="material-icons-outlined">delete</span> Deletar Bairro
+          </button>
+        }
+      </div>
+    </div>
+  </div>
