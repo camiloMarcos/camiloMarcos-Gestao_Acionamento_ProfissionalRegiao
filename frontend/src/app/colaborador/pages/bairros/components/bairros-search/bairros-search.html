@@ -1,0 +1,117 @@
+<!-- ====================================================== -->
+<!-- COMPONENTE: BUSCA DE BAIRROS                           -->
+<!-- RESPONSABILIDADE: Interface de filtros e captura de    -->
+<!-- parâmetros para pesquisa de bairros.                  -->
+<!-- ====================================================== -->
+
+<div class="advanced-search-container">
+    <div class="page-title">
+        <h1>Gestão de Bairros</h1>
+        <p>Gerencie Bairros e Regiões de Assistência Domiciliar</p>
+    </div>
+
+    <!-- Grade de Campos de busca -->
+    <div class="search-grid">
+        <!-- Filtro: Todos -->
+        <div class="search-group" [class.active]="tipoBusca === 'todos'" (click)="onLimpar()">
+            <label>
+                <span class="material-icons-outlined">list</span>
+                Todos os Bairros
+            </label>
+            <div class="search-field chip">
+                <span>Buscar todos</span>
+            </div>
+        </div>
+
+        <!-- Filtro: ID -->
+        <div class="search-group" [class.active]="tipoBusca === 'id'">
+            <label>
+                <span class="material-icons-outlined">fingerprint</span>
+                Buscar por ID
+            </label>
+            <div class="search-field">
+                <input type="text" [(ngModel)]="filtros.id" placeholder="Ex. 20" (focus)="setTipoBusca('id')" (keyup.enter)="onExecutarBusca()">
+            </div>
+        </div>
+
+        <!-- Filtro: Nome -->
+        <div class="search-group" [class.active]="tipoBusca === 'nome-parcial'">
+            <label>
+                <span class="material-icons-outlined">label</span>
+                Buscar por Nome
+            </label>
+            <div class="search-field">
+                <input type="text" [(ngModel)]="filtros.nome" placeholder="Ex. Centro" (focus)="setTipoBusca('nome-parcial')" (keyup.enter)="onExecutarBusca()">
+            </div>
+        </div>
+
+        <!-- Filtro: Cidade -->
+        <div class="search-group" [class.active]="tipoBusca === 'cidade'">
+            <label>
+                <span class="material-icons-outlined">location_city</span>
+                Buscar por Cidade
+            </label>
+            <div class="search-field">
+                <input type="text" [(ngModel)]="filtros.cidade" placeholder="Ex. Olinda" (focus)="setTipoBusca('cidade')" (keyup.enter)="onExecutarBusca()">
+            </div>
+        </div>
+
+        <!-- Filtro: Risco -->
+        <div class="search-group" [class.active]="tipoBusca === 'risco'">
+            <label>
+                <span class="material-icons-outlined">warning</span>
+                Buscar por Risco
+            </label>
+            <div class="search-field">
+                <select [(ngModel)]="filtros.risco" (focus)="setTipoBusca('risco')">
+                    <option value="">Área de risco...</option>
+                    <option value="perigoso">Perigosos / Distantes</option>
+                    <option value="seguro">Seguros / Acessíveis</option>
+                </select>
+            </div>
+        </div>
+
+        <!-- Filtro: ID Profissional -->
+        <div class="search-group" [class.active]="tipoBusca === 'profissional'">
+            <label>
+                <span class="material-icons-outlined">badge</span>
+                Buscar por Profissional (ID)
+            </label>
+            <div class="search-field">
+                <input type="text" [(ngModel)]="filtros.profissionalId" placeholder="Ex. 5" (focus)="setTipoBusca('profissional')" (keyup.enter)="onExecutarBusca()">
+            </div>
+        </div>
+    </div>
+
+    <!-- Botões de Ação do formulário de busca -->
+    <div class="search-actions-row">
+        <div class="secondary-actions">
+            <!-- Navegação para criação -->
+            <button class="btn-compact secondary" (click)="onIrParaCriar()">
+                <span class="material-icons-outlined">add_location_alt</span> Criar Novo Bairro
+            </button>
+            <!-- Navegação para exclusão -->
+            <button class="btn-compact secondary" (click)="onIrParaDeletar()">
+                <span class="material-icons-outlined">delete_sweep</span> Excluir / Congelar
+            </button>
+        </div>
+
+        <div class="main-actions">
+            <!-- Botão de execução da busca -->
+            <button class="btn-execute-search" (click)="onExecutarBusca()" [disabled]="carregando">
+                @if (carregando) {
+                    <span class="spinner-small"></span>
+                } @else {
+                    <span class="material-icons-outlined">search</span> Buscar
+                }
+            </button>
+            
+            <!-- Botão para limpar a grade de resultados -->
+            @if (telaResultados) {
+                <button class="btn-clear-grid" (click)="onLimpar()">
+                    <span class="material-icons-outlined">close</span> Limpar
+                </button>
+            }
+        </div>
+    </div>
+</div>

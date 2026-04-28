@@ -2,13 +2,16 @@ import { Component, inject, signal } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { BairroService } from '../../../core/services/bairro.service';
 import { Bairro } from '../../../core/models/bairro.model';
+import { BairrosTableComponent } from './components/bairros-table/bairros-table';
+import { BairrosSearchComponent } from './components/bairros-search/bairros-search';
+import { BairrosFormComponent } from './components/bairros-form/bairros-form';
 
 type Tela = 'inicio' | 'busca' | 'resultados' | 'formulario' | 'deletar' | 'confirmar-exclusao';
 type TipoBuscaBairro = 'todos' | 'id' | 'nome-exato' | 'nome-parcial' | 'cidade' | 'risco' | 'profissional';
 
 @Component({
   selector: 'app-bairros',
-  imports: [FormsModule],
+  imports: [FormsModule, BairrosTableComponent, BairrosSearchComponent, BairrosFormComponent],
   templateUrl: './bairros.html',
   styleUrl: './bairros.css',
 })

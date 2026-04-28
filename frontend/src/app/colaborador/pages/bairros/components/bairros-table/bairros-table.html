@@ -1,0 +1,47 @@
+<!-- ====================================================== -->
+<!-- COMPONENTE: TABELA DE BAIRROS                          -->
+<!-- RESPONSABILIDADE: Renderizar a lista de bairros e      -->
+<!-- disparar eventos de ação (editar/excluir).            -->
+<!-- ====================================================== -->
+
+<div class="tabela-container">
+    <table class="tabela">
+      <thead>
+        <tr>
+          <th>ID</th>
+          <th>Nome</th>
+          <th>Cidade</th>
+          <th>Segurança</th>
+          <th>Ações</th>
+        </tr>
+      </thead>
+      <tbody>
+        <!-- Loop iterativo sobre a lista de resultados -->
+        @for (b of resultados; track b.id) {
+          <tr>
+            <td>{{ b.id }}</td>
+            <td><strong>{{ b.nome }}</strong></td>
+            <td>{{ b.cidade }}</td>
+            <td>
+                <!-- Badge dinâmico baseado no status de risco -->
+                <span class="badge" [class.badge-perigo]="b.perigoDistante" [class.badge-seguro]="!b.perigoDistante">
+                  {{ b.perigoDistante ? 'Risco / Distante' : 'Seguro / Próximo' }}
+              </span>
+            </td>
+            <td class="acoes-celula">
+              <!-- Botão de Edição -->
+              <button class="icon-btn edit" (click)="onEditar(b)" title="Editar">
+                <span class="material-icons-outlined">edit</span>
+              </button>
+              
+              <!-- Botão de Exclusão -->
+              <button class="icon-btn delete" (click)="onExcluir(b)" title="Excluir">
+                <span class="material-icons-outlined">delete</span>
+              </button>
+            </td>
+          </tr>
+        }
+      </tbody>
+    </table>
+  </div>
+  

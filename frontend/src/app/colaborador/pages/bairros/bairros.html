@@ -12,128 +12,20 @@
     </div>
   }
 
-  <!-- =============================== -->
-  <!-- BUSCA AVANÇADA (FIXO NO TOPO) -->
-  <!-- =============================== -->
-  
-    <div class="page-title">
-      <h1>Gestão de Bairros</h1>
-      <p>Gerencie Bairros e Regiões de Assistência Domiciliar</p>
-    </div>
-
-    <!-- Formulário de Busca-->
-    <div class="search-grid">
-      <!-- Todos os Registros -->
-      <div class="search-group" [class.active]="tipoBusca === 'todos' && resultados().length > 0" (click)="tipoBusca = 'todos'; voltarInicio()">
-        <label>
-          <span class="material-icons-outlined">list</span>
-          Todos os Bairros
-        </label>
-        <div class="search-field chip">
-          <span>Buscar todos</span>
-        </div>
-      </div>
-
-      <!-- Buscar por ID -->
-      <div class="search-group" [class.active]="tipoBusca === 'id'">
-        <label>
-          <span class="material-icons-outlined">fingerprint</span>
-          Buscar por ID
-        </label>
-        <div class="search-field">
-          <input type="text" [(ngModel)]="filtros.id" placeholder="Ex. 20" (focus)="tipoBusca = 'id'" (keyup.enter)="executarBusca()">
-        </div>
-      </div>
-
-      <!-- Buscar por Nome -->
-      <div class="search-group" [class.active]="tipoBusca === 'nome-parcial'">
-        <label>
-          <span class="material-icons-outlined">label</span>
-          Buscar por Nome
-        </label>
-        <div class="search-field">
-          <input type="text" [(ngModel)]="filtros.nome" placeholder="Ex. Centro" (focus)="tipoBusca = 'nome-parcial'" (keyup.enter)="executarBusca()">
-        </div>
-      </div>
-
-      <!-- Buscar por Cidade -->
-      <div class="search-group" [class.active]="tipoBusca === 'cidade'">
-        <label>
-          <span class="material-icons-outlined">location_city</span>
-          Buscar por Cidade
-        </label>
-        <div class="search-field">
-          <input type="text" [(ngModel)]="filtros.cidade" placeholder="Ex. Olinda" (focus)="tipoBusca = 'cidade'" (keyup.enter)="executarBusca()">
-        </div>
-      </div>
-
-      <!-- Buscar por Risco -->
-      <div class="search-group" [class.active]="tipoBusca === 'risco'">
-        <label>
-          <span class="material-icons-outlined">warning</span>
-          Buscar por Risco
-        </label>
-        <div class="search-field">
-          <select [(ngModel)]="filtros.risco" (focus)="tipoBusca = 'risco'">
-            <option value="">Área de risco...</option>
-            <option value="perigoso">Perigosos / Distantes</option>
-            <option value="seguro">Seguros / Acessíveis</option>
-          </select>
-        </div>
-      </div>
-
-      <!-- Buscar por ID do Profissional -->
-      <div class="search-group" [class.active]="tipoBusca === 'profissional'">
-        <label>
-          <span class="material-icons-outlined">badge</span>
-          Buscar por Profissional (ID)
-        </label>
-        <div class="search-field">
-          <input type="text" [(ngModel)]="filtros.profissionalId" placeholder="Ex. 5" (focus)="tipoBusca = 'profissional'" (keyup.enter)="executarBusca()">
-        </div>
-      </div>
-
-      <!-- Buscar por Nome do Profissional -->
-      <div class="search-group" [class.active]="tipoBusca === 'profissional'">
-        <label>
-          <span class="material-icons-outlined">person_search</span>
-          Buscar por Profissional
-        </label>
-        <div class="search-field">
-          <input type="text" [(ngModel)]="filtros.profissionalNome" placeholder="Ex. Diego" (focus)="tipoBusca = 'profissional'" (keyup.enter)="executarBusca()">
-        </div>
-      </div>
-    </div>
-
-    <!-- Botão de Ação -->
-    <div class="search-actions-row">
-      <div class="secondary-actions">
-        <button class="btn-compact secondary" (click)="irParaCriar()">
-          <span class="material-icons-outlined">add_location_alt</span> Criar Novo Bairro
-        </button>
-        <button class="btn-compact secondary" (click)="irParaDeletar()">
-          <span class="material-icons-outlined">delete_sweep</span> Excluir / Congelar
-        </button>
-      </div>
-
-      <div class="main-actions">
-        <button class="btn-execute-search" (click)="executarBusca()" [disabled]="carregando()">
-          @if (carregando()) {
-            <span class="spinner-small"></span>
-          } @else {
-            <span class="material-icons-outlined">search</span> Buscar
-          }
-        </button>
-        @if (telaAtual() === 'resultados') {
-          <button class="btn-clear-grid" (click)="voltarInicio()">
-            <span class="material-icons-outlined">close</span> Limpar
-          </button>
-        }
-      </div>
-    </div>
-
-    
-  
+  <!-- ====================================================== -->
+  <!-- SEÇÃO: BUSCA E FILTROS                                 -->
+  <!-- Componente especializado para gerenciar parâmetros de pesquisa -->
+  <!-- ====================================================== -->
+  <app-bairros-search
+    [filtros]="filtros"
+    [carregando]="carregando()"
+    [tipoBusca]="tipoBusca"
+    [telaResultados]="telaAtual() === 'resultados'"
+    (buscar)="executarBusca()"
+    (limpar)="voltarInicio()"
+    (criar)="irParaCriar()"
+    (deletar)="irParaDeletar()">
+  </app-bairros-search>
 
   <div class="content-divider"></div>
 
@@ -141,105 +33,38 @@
   <!-- CONTEÚDO DINÂMICO               -->
   <!-- =============================== -->
 
+  <!-- ====================================================== -->
+  <!-- SEÇÃO: LISTAGEM DE RESULTADOS                          -->
+  <!-- Exibe a tabela quando há bairros retornados pela busca -->
+  <!-- ====================================================== -->
   @if (resultados().length > 0 && telaAtual() === 'resultados') {
     <div class="tela-resultados">
       <div class="results-header">
         <h2>{{ resultados().length }} bairro(s) encontrado(s)</h2>
       </div>
 
-      <div class="tabela-container">
-        <table class="tabela">
-          <thead>
-            <tr>
-              <th>ID</th>
-              <th>Nome</th>
-              <th>Cidade</th>
-              <th>Segurança</th>
-              <th>Ações</th>
-            </tr>
-          </thead>
-          <tbody>
-            @for (b of resultados(); track b.id) {
-              <tr>
-                <td>{{ b.id }}</td>
-                <td><strong>{{ b.nome }}</strong></td>
-                <td>{{ b.cidade }}</td>
-                <td>
-                    <span class="badge" [class.badge-perigo]="b.perigoDistante" [class.badge-seguro]="!b.perigoDistante">
-                      {{ b.perigoDistante ? 'Risco / Distante' : 'Seguro / Próximo' }}
-                  </span>
-                </td>
-                <td class="acoes-celula">
-                  <button class="icon-btn edit" (click)="editarBairro(b)" title="Editar">
-                    <span class="material-icons-outlined">edit</span>
-                  </button>
-                  <button class="icon-btn delete" (click)="selecionarParaDeletar(b)" title="Excluir">
-                    <span class="material-icons-outlined">delete</span>
-                  </button>
-                </td>
-              </tr>
-            }
-          </tbody>
-        </table>
-      </div>
+      <!-- Componente especializado para renderizar a tabela -->
+      <app-bairros-table 
+        [resultados]="resultados()"
+        (editar)="editarBairro($event)"
+        (excluir)="selecionarParaDeletar($event)">
+      </app-bairros-table>
     </div>
   }
 
-  <!-- =============================== -->
-  <!-- TELA FORMULÁRIO (Criar/Editar)   -->
-  <!-- =============================== -->
+  <!-- ====================================================== -->
+  <!-- SEÇÃO: FORMULÁRIO (CRIAR/EDITAR)                       -->
+  <!-- Componente especializado para entrada de dados         -->
+  <!-- ====================================================== -->
   @if (telaAtual() === 'formulario') {
-    <div class="tela-formulario">
-      <div class="page-header">
-        <button class="btn-voltar" (click)="descartarAlteracoes()">
-          <span class="material-icons-outlined">arrow_back</span> Voltar
-        </button>
-        <h1>{{ editando ? 'Editar Bairro' : 'Novo Bairro' }}</h1>
-        <p>{{ editando ? 'Altere os dados abaixo e salve.' : 'Preencha os dados abaixo para cadastrar.' }}</p>
-      </div>
-
-      <div class="formulario-card">
-        <div class="form-grid">
-          <div class="form-group">
-            <label for="nome">Nome *</label>
-            <input id="nome" type="text" [(ngModel)]="bairro.nome" placeholder="Nome do bairro" required />
-          </div>
-
-          <div class="form-group">
-            <label for="cidade">Cidade *</label>
-            <input id="cidade" type="text" [(ngModel)]="bairro.cidade" placeholder="Nome da cidade" />
-          </div>
-
-          <div class="form-group" style="grid-column: 1 / -1">
-            <label for="perigo">
-              <input type="checkbox" id="perigo" [(ngModel)]="bairro.perigoDistante" />
-              <span style="margin-left: 8px">Este bairro é uma área de risco?</span>
-            </label>
-          </div>
-        </div>
-
-        <div class="form-acoes">
-          <button class="btn-primario" (click)="salvarBairro()" [disabled]="carregando()">
-            @if (carregando()) {
-              <span class="spinner"></span> Salvando...
-            } @else {
-              <span class="material-icons-outlined">save</span>
-              {{ editando ? 'Salvar Alterações' : 'Cadastrar Bairro' }}
-            }
-          </button>
-
-          <button class="btn-secundario" (click)="descartarAlteracoes()">
-            <span class="material-icons-outlined">undo</span> Descartar
-          </button>
-
-          @if (editando) {
-            <button class="btn-perigo" (click)="deletarDoFormulario()">
-              <span class="material-icons-outlined">delete</span> Deletar Bairro
-            </button>
-          }
-        </div>
-      </div>
-    </div>
+    <app-bairros-form
+      [bairro]="bairro"
+      [editando]="editando"
+      [carregando]="carregando()"
+      (salvar)="salvarBairro()"
+      (cancelar)="descartarAlteracoes()"
+      (deletar)="deletarDoFormulario()">
+    </app-bairros-form>
   }
 
   <!-- =============================== -->
