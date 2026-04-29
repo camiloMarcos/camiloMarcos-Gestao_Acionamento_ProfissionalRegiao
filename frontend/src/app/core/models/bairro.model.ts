@@ -1,7 +1,7 @@
 import { Profissional } from './profissional.model';
 
 export interface Bairro {
-  id: number;
+  id?: number;
   nome: string;
   cidade: string;
   perigoDistante: boolean;

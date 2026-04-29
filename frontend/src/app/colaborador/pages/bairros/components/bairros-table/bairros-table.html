@@ -8,34 +8,49 @@
     <table class="tabela">
       <thead>
         <tr>
-          <th>ID</th>
-          <th>Nome</th>
-          <th>Cidade</th>
-          <th>Segurança</th>
-          <th>Ações</th>
+          <th class="col-id">ID</th>
+          <th class="col-nome">Nome</th>
+          <th class="col-cidade">Cidade</th>
+          <th class="col-status">Status</th>
+          <th class="col-seguranca">Segurança</th>
+          <th class="col-acoes">Ações</th>
         </tr>
       </thead>
       <tbody>
         <!-- Loop iterativo sobre a lista de resultados -->
         @for (b of resultados; track b.id) {
           <tr>
-            <td>{{ b.id }}</td>
-            <td><strong>{{ b.nome }}</strong></td>
-            <td>{{ b.cidade }}</td>
-            <td>
+            <td class="col-id">{{ b.id }}</td>
+            <td class="col-nome"><strong>{{ b.nome }}</strong></td>
+            <td class="col-cidade">{{ b.cidade }}</td>
+            <td class="col-status">
+              <!-- Indicador visual de status -->
+              <div class="indicador-status" 
+                   [class.indicador-seguro]="!b.perigoDistante" 
+                   [class.indicador-risco]="b.perigoDistante"
+                   [title]="b.perigoDistante ? 'Área de risco / Distante' : 'Área segura / Próxima'">
+                <span class="material-icons-outlined">{{ b.perigoDistante ? 'error' : 'check_circle' }}</span>
+              </div>
+            </td>
+            <td class="col-seguranca">
                 <!-- Badge dinâmico baseado no status de risco -->
                 <span class="badge" [class.badge-perigo]="b.perigoDistante" [class.badge-seguro]="!b.perigoDistante">
                   {{ b.perigoDistante ? 'Risco / Distante' : 'Seguro / Próximo' }}
               </span>
             </td>
-            <td class="acoes-celula">
+            <td class="col-acoes">
+              <!-- Botão de Visualizar -->
+              <button class="icon-btn view" (click)="onVisualizar(b)" title="Visualizar detalhes">
+                <span class="material-icons-outlined">visibility</span>
+              </button>
+
               <!-- Botão de Edição -->
-              <button class="icon-btn edit" (click)="onEditar(b)" title="Editar">
+              <button class="icon-btn edit" (click)="onEditar(b)" title="Editar bairro">
                 <span class="material-icons-outlined">edit</span>
               </button>
               
               <!-- Botão de Exclusão -->
-              <button class="icon-btn delete" (click)="onExcluir(b)" title="Excluir">
+              <button class="icon-btn delete" (click)="onExcluir(b)" title="Excluir bairro">
                 <span class="material-icons-outlined">delete</span>
               </button>
             </td>

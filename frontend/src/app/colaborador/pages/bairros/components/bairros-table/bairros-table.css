@@ -1,10 +1,11 @@
-/* ESTILOS ESPECÍFICOS DA TABELA DE BAIRROS */
+/* ESTILOS ESPECÍFICOS DA TABELA DE BAIRROS - ESTÉTICA SAP/ERP */
 
 .tabela-container { 
     background: white; 
-    border-radius: 12px; 
+    border-radius: 0px; 
     overflow: hidden; 
-    border: 1px solid #eee; 
+    border: 1px solid #a0a0a0; 
+    box-shadow: none;
 }
 
 .tabela { 
@@ -12,57 +13,175 @@
     border-collapse: collapse; 
 }
 
+/* ===== CABEÇALHO COM ESTILO AZUL-ACINZENTADO ===== */
 .tabela th { 
-    background: #fafafa; 
-    padding: 15px; 
+    background: linear-gradient(90deg, #556b82 0%, #4a5f75 100%);
+    padding: 10px 10px; 
     text-align: left; 
-    color: #666; 
-    font-size: 0.85rem; 
-    border-bottom: 1px solid #eee; 
+    color: white; 
+    font-size: 0.8rem; 
+    font-weight: 600; 
+    border-bottom: 1px solid #a0a0a0;
+    letter-spacing: 0.2px;
+    white-space: nowrap;
 }
 
 .tabela td { 
-    padding: 15px; 
-    border-bottom: 1px solid #f5f5f5; 
-    font-size: 0.95rem; 
+    padding: 8px 10px; 
+    border-bottom: 1px solid #d8d8d8; 
+    font-size: 0.9rem; 
+    vertical-align: middle;
+    color: #333;
+}
+
+/* Zebra Striping - Linhas alternadas */
+.tabela tbody tr:nth-child(odd) {
+    background-color: #ffffff;
+}
+
+.tabela tbody tr:nth-child(even) {
+    background-color: #f5f5f5;
+}
+
+/* Hover sobre as linhas */
+.tabela tbody tr:hover {
+    background-color: #eef3f9;
+}
+
+/* Largura das colunas - Proporções equilibradas */
+.col-id { 
+    width: 6%; 
+    text-align: center; 
+}
+
+.col-nome { 
+    width: 26%; 
+}
+
+.col-cidade { 
+    width: 22%; 
+}
+
+.col-status { 
+    width: 10%; 
+    text-align: center; 
+}
+
+.col-seguranca { 
+    width: 26%; 
+}
+
+.col-acoes { 
+    width: 10%; 
+    text-align: center; 
+}
+
+/* ===== INDICADOR VISUAL DE STATUS ===== */
+.indicador-status {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 16px;
+    height: 16px;
+    border-radius: 50%;
+    font-size: 12px;
+    cursor: pointer;
+    transition: transform 0.2s, box-shadow 0.2s;
+    flex-shrink: 0;
+}
+
+.indicador-risco {
+    background: #d32f2f;
+    color: white;
+}
+
+.indicador-risco:hover {
+    background: #b71c1c;
+    box-shadow: 0 2px 6px rgba(211, 47, 47, 0.4);
+}
+
+.indicador-seguro {
+    background: #388e3c;
+    color: white;
+}
+
+.indicador-seguro:hover {
+    background: #2e7d32;
+    box-shadow: 0 2px 6px rgba(56, 142, 60, 0.4);
 }
 
 /* Estilização dos Badges de Status */
 .badge { 
-    padding: 4px 10px; 
-    border-radius: 6px; 
-    font-size: 0.75rem; 
+    display: inline-block;
+    padding: 4px 8px; 
+    border-radius: 3px; 
+    font-size: 0.7rem; 
     font-weight: 600; 
+    text-transform: capitalize;
+    white-space: nowrap;
 }
 
 .badge-perigo { 
     background: #fff3e0; 
-    color: #ef6c00; 
+    color: #e65100; 
 }
 
 .badge-seguro { 
     background: #e3f2fd; 
-    color: #1565c0; 
+    color: #0d47a1; 
 }
 
 /* Botões de Ação na Tabela */
-.acoes-celula {
+.col-acoes {
     display: flex;
-    gap: 8px;
+    justify-content: flex-start;
+    gap: 4px;
+    padding-left: 8px;
+}
+
+.tabela th.col-acoes {
+    text-align: center;
 }
 
 .icon-btn { 
     background: none; 
     border: none; 
     cursor: pointer; 
-    color: #1e88e5; 
-    padding: 4px;
-    border-radius: 4px;
-    transition: background-color 0.2s;
+    color: #1976d2; 
+    padding: 4px 6px;
+    border-radius: 2px;
+    transition: all 0.2s ease;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
 }
 
 .icon-btn:hover {
-    background-color: #f0f7ff;
+    background-color: #f0f0f0;
+    color: #0d47a1;
+}
+
+.icon-btn:active {
+    transform: scale(0.92);
+}
+
+.icon-btn.view { 
+    color: #1976d2; 
+}
+
+.icon-btn.view:hover {
+    background-color: #e3f2fd;
+    color: #0d47a1;
+}
+
+.icon-btn.edit { 
+    color: #1976d2; 
+}
+
+.icon-btn.edit:hover {
+    background-color: #e3f2fd;
+    color: #0d47a1;
 }
 
 .icon-btn.delete { 
@@ -71,8 +190,10 @@
 
 .icon-btn.delete:hover {
     background-color: #fff5f5;
+    color: #b71c1c;
 }
 
 .material-icons-outlined {
-    font-size: 20px;
+    font-size: 18px;
+    font-variation-settings: 'FILL' 1;
 }
