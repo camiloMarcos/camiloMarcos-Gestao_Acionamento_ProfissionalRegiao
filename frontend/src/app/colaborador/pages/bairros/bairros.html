@@ -46,6 +46,7 @@
       <!-- Componente especializado para renderizar a tabela -->
       <app-bairros-table 
         [resultados]="resultados()"
+        (visualizar)="visualizarBairro($event)"
         (editar)="editarBairro($event)"
         (excluir)="selecionarParaDeletar($event)">
       </app-bairros-table>

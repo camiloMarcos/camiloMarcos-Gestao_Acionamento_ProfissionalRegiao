@@ -27,6 +27,18 @@ export class BairrosTableComponent {
   @Output() excluir = new EventEmitter<Bairro>();
 
   /**
+   * Emissor de evento para quando o usuário deseja visualizar detalhes de um bairro.
+   */
+  @Output() visualizar = new EventEmitter<Bairro>();
+
+  /**
+   * Notifica o componente pai para visualizar os detalhes do bairro selecionado.
+   */
+  onVisualizar(bairro: Bairro): void {
+    this.visualizar.emit(bairro);
+  }
+
+  /**
    * Notifica o componente pai para iniciar a edição do bairro selecionado.
    */
   onEditar(bairro: Bairro): void {

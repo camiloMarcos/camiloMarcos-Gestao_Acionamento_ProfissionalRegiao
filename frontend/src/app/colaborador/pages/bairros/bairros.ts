@@ -223,6 +223,14 @@ export class Bairros {
   // CRIAR / EDITAR
   // ========================
 
+  visualizarBairro(bairroSelecionado: Bairro) {
+    this.limparMensagem();
+    this.editando = false;
+    this.bairro = { ...bairroSelecionado };
+    // TODO: Implementar tela de visualização ou abrir em modo somente leitura
+    this.mostrarMensagem(`Visualizando: ${bairroSelecionado.nome}`, 'info');
+  }
+
   editarBairro(bairroSelecionado: Bairro) {
     this.limparMensagem();
     this.editando = true;
@@ -301,6 +309,13 @@ export class Bairros {
   confirmarExclusao() {
     if (!this.bairroParaDeletar) return;
     this.carregando.set(true);
+
+    if (this.bairroParaDeletar.id === undefined) {
+      // TODO: FUTURAMENTE - Padronizar mensagens de erro e retornos da aplicação
+      this.mostrarMensagem('Erro: ID do bairro não encontrado para exclusão.', 'erro');
+      this.carregando.set(false);
+      return;
+    }
 
     this.bairroService.deletar(this.bairroParaDeletar.id).subscribe({
       next: () => {
