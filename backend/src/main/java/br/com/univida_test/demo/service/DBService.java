@@ -5,6 +5,7 @@ import java.util.Arrays;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import br.com.univida_test.demo.models.Bairro;
 import br.com.univida_test.demo.models.Profissional;
@@ -21,6 +22,7 @@ public class DBService {
     private ProfissionalRepository profissionalRepository;
 
 
+    @Transactional
     public void instanciaDB() {
       if (profissionalRepository.count() > 0 || bairroRepository.count() > 0) {
         return;

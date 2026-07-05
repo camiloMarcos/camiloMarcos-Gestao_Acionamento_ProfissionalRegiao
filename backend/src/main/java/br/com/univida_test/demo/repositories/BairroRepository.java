@@ -23,6 +23,6 @@ public interface BairroRepository extends JpaRepository<Bairro, Integer>, JpaSpe
     List<Bairro> findByCidade(String cidade);
 
     // Buscar bairros por risco/perigo (usando @Query para contornar o underscore)
-    @Query("SELECT b FROM Bairro b WHERE b.perigo_Distante = :perigo")
-    List<Bairro> findByPerigo_Distante(boolean perigo);
+    @Query("SELECT b FROM Bairro b WHERE b.perigoDistante = :perigo")
+    List<Bairro> findByPerigoDistante(boolean perigo);
 }

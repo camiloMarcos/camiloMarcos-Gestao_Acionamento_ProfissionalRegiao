@@ -57,7 +57,7 @@ public class ProfissionalDTO {
             this.email = email;
             this.endereco = endereco;
             this.cidade = cidade;
-            this.bairrosAtendidos = bairrosAtendidos;
+            this.bairrosAtendidos = bairrosAtendidos != null ? bairrosAtendidos : new java.util.ArrayList<>();
         }
 
         public Integer getId() {
@@ -120,7 +120,7 @@ public class ProfissionalDTO {
             return bairrosAtendidos;
         }
         public void setBairrosAtendidos(List<Bairro> bairrosAtendidos) {
-            this.bairrosAtendidos = bairrosAtendidos;
+            this.bairrosAtendidos = bairrosAtendidos != null ? bairrosAtendidos : new java.util.ArrayList<>();
         }
     }
 

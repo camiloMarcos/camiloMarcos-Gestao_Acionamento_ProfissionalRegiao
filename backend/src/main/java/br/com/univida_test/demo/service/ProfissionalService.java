@@ -124,8 +124,11 @@ public class ProfissionalService {
         Bairro bairro = bairroRepository.findById(bairroId)
                 .orElseThrow(() -> new ObjectNotFoundException("Bairro não encontrado com id " + bairroId));
 
-        boolean removidoDoProfissional = profissional.getBairrosAtendidos()
+        boolean removidoDoProfissional = false;
+        if (profissional.getBairrosAtendidos() != null) {
+            removidoDoProfissional = profissional.getBairrosAtendidos()
                 .removeIf(b -> Objects.equals(b.getId(), bairroId));
+        }
         boolean removidoDoBairro = bairro.getProfissionais()
                 .removeIf(p -> Objects.equals(p.getId(), profissionalId));
 

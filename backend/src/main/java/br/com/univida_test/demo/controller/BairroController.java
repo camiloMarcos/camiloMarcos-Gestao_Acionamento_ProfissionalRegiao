@@ -24,7 +24,6 @@ import br.com.univida_test.demo.service.BairroService;
 @RequestMapping("/bairro")
 public class BairroController {
 
-    
     @Autowired
     private BairroService bairroService;
     @Autowired
@@ -39,8 +38,9 @@ public class BairroController {
             @RequestParam(required = false) Boolean perigoso,
             @RequestParam(required = false) Integer profissionalId,
             @RequestParam(required = false) String profissionalNome) {
-        
-        List<Bairro> list = bairroService.findByFiltrosDinamicos(id, nome, cidade, perigoso, profissionalId, profissionalNome);
+
+        List<Bairro> list = bairroService.findByFiltrosDinamicos(id, nome, cidade, perigoso, profissionalId,
+                profissionalNome);
         List<BairroDto> listDto = new ArrayList<>();
         for (Bairro obj : list) {
             listDto.add(modelMapper.map(obj, BairroDto.class));
@@ -66,7 +66,6 @@ public class BairroController {
         return ResponseEntity.ok().body(modelMapper.map(bairro, BairroDto.class));
     }
 
-
     // Criar/salvar um novo Bairro.
     @PostMapping
     public ResponseEntity<BairroDto> save(@RequestBody BairroDto bairroDto) {
@@ -77,11 +76,11 @@ public class BairroController {
 
     // Atualizar um Bairro existente.
     @PutMapping("/{id}")
-    public ResponseEntity<BairroDto> update (@PathVariable Integer id, @RequestBody BairroDto bairroDto) {
-         bairroDto.setId(id);
-         Bairro bairroUp = bairroService.update(modelMapper.map(bairroDto, Bairro.class));
-         return ResponseEntity.ok().body(modelMapper.map(bairroUp, BairroDto.class));
-        }
+    public ResponseEntity<BairroDto> update(@PathVariable Integer id, @RequestBody BairroDto bairroDto) {
+        bairroDto.setId(id);
+        Bairro bairroUp = bairroService.update(modelMapper.map(bairroDto, Bairro.class));
+        return ResponseEntity.ok().body(modelMapper.map(bairroUp, BairroDto.class));
+    }
 
     // Deletar um Bairro por ID
     @DeleteMapping("/{id}")
@@ -121,8 +120,19 @@ public class BairroController {
 
     // Buscar Bairro(s) por risco/perigo
     @GetMapping("/risco/{perigo}")
-    public ResponseEntity<List<BairroDto>> findByPerigoso(@PathVariable boolean perigo) {
-        List<Bairro> list = bairroService.findByPerigoso(perigo);
+    public ResponseEntity<List<BairroDto>> findByPerigoDistante(@PathVariable boolean perigo) {
+        List<Bairro> list = bairroService.findByPerigoDistante(perigo);
+        List<BairroDto> listDto = new ArrayList<>();
+        for (Bairro obj : list) {
+            listDto.add(modelMapper.map(obj, BairroDto.class));
+        }
+        return ResponseEntity.ok().body(listDto);
+    }
+
+    // Buscar Bairro(s) associados a um Profissional específico
+    @GetMapping("/profissional/{profissionalId}")
+    public ResponseEntity<List<BairroDto>> findByProfissionalId(@PathVariable Integer profissionalId) {
+        List<Bairro> list = bairroService.findByProfissionalId(profissionalId);
         List<BairroDto> listDto = new ArrayList<>();
         for (Bairro obj : list) {
             listDto.add(modelMapper.map(obj, BairroDto.class));
@@ -130,8 +140,3 @@ public class BairroController {
         return ResponseEntity.ok().body(listDto);
     }
 }
-
-
-
-
-

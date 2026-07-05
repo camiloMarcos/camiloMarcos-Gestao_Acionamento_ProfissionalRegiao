@@ -17,31 +17,31 @@ import br.com.univida_test.demo.repositories.ProfissionalRepository;
  * ============================================================================
  * SERVIÇO ESPECIALIZADO: GERENCIAMENTO DE RELACIONAMENTOS
  * ============================================================================
- * Gerenciar exclusivamente as operações: associação e dissociação entre as entidades Profissional e Bairro.
+ * Gerenciar exclusivamente as operações: associação e dissociação entre as
+ * entidades Profissional e Bairro.
  * 
  * Responsabilidades:
  * - Associar profissional existente a um bairro existente
  * - Criar novo profissional e associar a um ou múltiplos bairros
  * - Desassociar profissional de um bairro
  * - Validar regras de negócio do relacionamento
- * - Garantir integridade bidirecional da associação */
+ * - Garantir integridade bidirecional da associação
+ */
 @Service
 public class ProfissionalBairroService {
 
-    
     @Autowired
     private ProfissionalRepository profissionalRepository;
 
     @Autowired
     private BairroRepository bairroRepository;
 
-
     // ========================================================================
     // OPERAÇÃO 1: ASSOCIAR PROFISSIONAL EXISTENTE A BAIRRO EXISTENTE
     // ========================================================================
-       @Transactional
+    @Transactional
     public void associarProfissionalExistenteABairro(Integer profissionalId, Integer bairroId) {
-        
+
         // ▶ Validação de entrada
         validarIds(profissionalId, bairroId);
 
@@ -59,11 +59,10 @@ public class ProfissionalBairroService {
         bairroRepository.save(bairro);
     }
 
-
     // ========================================================================
     // OPERAÇÃO 2: CRIAR NOVO PROFISSIONAL E ASSOCIAR A BAIRRO(S)
     // ========================================================================
-    /*Cria um novo profissional com seus dados básicos e o associa a um ou múltiplos bairros em uma única transação. */
+
     @Transactional
     public Profissional criarNovoProfissionalComBairros(
             String nome,
@@ -81,8 +80,7 @@ public class ProfissionalBairroService {
         // ▶ Validar lista de bairros
         if (bairroIds == null || bairroIds.isEmpty()) {
             throw new IllegalArgumentException(
-                "Deve-se associar ao menos um bairro ao criar novo profissional"
-            );
+                    "Deve-se associar ao menos um bairro ao criar novo profissional");
         }
 
         // ▶ Buscar todos os bairros
@@ -91,9 +89,8 @@ public class ProfissionalBairroService {
         // ▶ Verificar se todos bairros foram encontrados
         if (bairros.size() != bairroIds.size()) {
             throw new ObjectNotFoundException(
-                "Alguns bairros não foram encontrados. Esperava " + bairroIds.size() + 
-                " bairros, mas encontrou " + bairros.size()
-            );
+                    "Alguns bairros não foram encontrados. Esperava " + bairroIds.size() +
+                            " bairros, mas encontrou " + bairros.size());
         }
 
         // ▶ Criar nova instância de profissional
@@ -115,21 +112,12 @@ public class ProfissionalBairroService {
         return profissionalRepository.save(novoProfissional);
     }
 
-
     // ========================================================================
     // OPERAÇÃO 2B: CRIAR NOVO BAIRRO E ASSOCIAR A PROFISSIONAL(IS)
     // ========================================================================
     /**
      * Cria um novo bairro e o associa a um ou múltiplos profissionais existentes.
      * Tudo em uma única transação.
-     * 
-     * @param nomeBairro Nome do novo bairro
-     * @param cidadeBairro Cidade do novo bairro
-     * @param perigoDistante Se o bairro é distante/perigoso
-     * @param profissionalIds IDs dos profissionais a associar (deve ter ao menos um)
-     * @return O novo Bairro criado e associado
-     * @throws IllegalArgumentException se dados inválidos ou lista vazia
-     * @throws ObjectNotFoundException se algum profissional não existir
      */
     @Transactional
     public Bairro criarNovoBairroComProfissionais(
@@ -150,8 +138,7 @@ public class ProfissionalBairroService {
         // ▶ Validar lista de profissionais
         if (profissionalIds == null || profissionalIds.isEmpty()) {
             throw new IllegalArgumentException(
-                "Deve-se associar ao menos um profissional ao criar novo bairro"
-            );
+                    "Deve-se associar ao menos um profissional ao criar novo bairro");
         }
 
         // ▶ Buscar todos os profissionais
@@ -160,16 +147,15 @@ public class ProfissionalBairroService {
         // ▶ Verificar se todos profissionais foram encontrados
         if (profissionais.size() != profissionalIds.size()) {
             throw new ObjectNotFoundException(
-                "Alguns profissionais não foram encontrados. Esperava " + profissionalIds.size() + 
-                " profissionais, mas encontrou " + profissionais.size()
-            );
+                    "Alguns profissionais não foram encontrados. Esperava " + profissionalIds.size() +
+                            " profissionais, mas encontrou " + profissionais.size());
         }
 
         // ▶ Criar nova instância de bairro
         Bairro novoBairro = new Bairro();
         novoBairro.setNome(nomeBairro);
         novoBairro.setCidade(cidadeBairro);
-        novoBairro.setPerigo_Distante(perigoDistante);
+        novoBairro.setPerigoDistante(perigoDistante);
 
         // ▶ Associar cada profissional ao novo bairro
         for (Profissional prof : profissionais) {
@@ -186,19 +172,6 @@ public class ProfissionalBairroService {
     /**
      * Cria um novo profissional COM UM NOVO BAIRRO.
      * Útil quando você quer criar ambos simultaneously.
-     * 
-     * @param nomeProfissional Nome do novo profissional
-     * @param especialidade Especialidade
-     * @param numeroConselho Número do conselho
-     * @param telefone Telefone
-     * @param email Email
-     * @param endereco Endereço
-     * @param cidadeProfissional Cidade do profissional
-     * @param nomeBairro Nome do novo bairro
-     * @param cidadeBairro Cidade do novo bairro
-     * @param perigoDistante Se o bairro é distante
-     * @return O novo Profissional criado e associado
-     * @throws IllegalArgumentException se dados inválidos
      */
     @Transactional
     public Profissional criarNovoProfissionalComNovoBairro(
@@ -214,8 +187,8 @@ public class ProfissionalBairroService {
             boolean perigoDistante) {
 
         // ▶ Validar dados do novo profissional
-        validarDadosNovoProfissional(nomeProfissional, especialidade, numeroConselho, 
-                                     telefone, email, endereco, cidadeProfissional);
+        validarDadosNovoProfissional(nomeProfissional, especialidade, numeroConselho,
+                telefone, email, endereco, cidadeProfissional);
 
         // ▶ Validar dados do novo bairro
         if (nomeBairro == null || nomeBairro.trim().isEmpty()) {
@@ -240,7 +213,7 @@ public class ProfissionalBairroService {
         Bairro novoBairro = new Bairro();
         novoBairro.setNome(nomeBairro);
         novoBairro.setCidade(cidadeBairro);
-        novoBairro.setPerigo_Distante(perigoDistante);
+        novoBairro.setPerigoDistante(perigoDistante);
 
         // ▶ Associar com sincronização bidirecional automática
         novoProfissional.adicionarNovoBairro(novoBairro);
@@ -250,11 +223,12 @@ public class ProfissionalBairroService {
     }
 
     // ========================================================================
-    // OPERAÇÃO 3: DESASSOCIAR PROFISSIONAL DE BAIRRO -> Remove a associação entre um profissional e um bairro.
+    // OPERAÇÃO 3: DESASSOCIAR PROFISSIONAL DE BAIRRO -> Remove a associação entre
+    // um profissional e um bairro.
     // ========================================================================
     @Transactional
     public void desassociarProfissionalDeBairro(Integer profissionalId, Integer bairroId) {
-        
+
         // ▶ Validação de entrada
         validarIds(profissionalId, bairroId);
 
@@ -272,16 +246,7 @@ public class ProfissionalBairroService {
     // ========================================================================
     // OPERAÇÃO 4: ASSOCIAR PROFISSIONAL EXISTENTE COM NOVO BAIRRO
     // ========================================================================
-    /**
-     * Associa um profissional existente com um novo bairro (que será criado).
-     * 
-     * @param profissionalId ID do profissional existente
-     * @param nomeBairro Nome do novo bairro
-     * @param cidadeBairro Cidade do novo bairro
-     * @param perigoDistante Se é distante/perigoso
-     * @return O novo Bairro criado e associado
-     * @throws ObjectNotFoundException se profissional não existir
-     */
+    /* Associa um profissional existente com um novo bairro (que será criado). */
     @Transactional
     public Bairro associarProfissionalExistenteComNovoBairro(
             Integer profissionalId,
@@ -305,7 +270,7 @@ public class ProfissionalBairroService {
         Bairro novoBairro = new Bairro();
         novoBairro.setNome(nomeBairro);
         novoBairro.setCidade(cidadeBairro);
-        novoBairro.setPerigo_Distante(perigoDistante);
+        novoBairro.setPerigoDistante(perigoDistante);
 
         // ▶ Associar profissional ao novo bairro
         profissional.adicionarNovoBairro(novoBairro);
@@ -319,20 +284,7 @@ public class ProfissionalBairroService {
     // ========================================================================
     // OPERAÇÃO 5: ASSOCIAR BAIRRO EXISTENTE COM NOVO PROFISSIONAL
     // ========================================================================
-    /**
-     * Associa um bairro existente com um novo profissional (que será criado).
-     * 
-     * @param bairroId ID do bairro existente
-     * @param nomeProfissional Nome do novo profissional
-     * @param especialidade Especialidade
-     * @param numeroConselho Número do conselho
-     * @param telefone Telefone
-     * @param email Email
-     * @param endereco Endereço
-     * @param cidadeProfissional Cidade do profissional
-     * @return O novo Profissional criado e associado
-     * @throws ObjectNotFoundException se bairro não existir
-     */
+    /* Associa um bairro existente com um novo profissional (que será criado). */
     @Transactional
     public Profissional associarBairroExistenteComNovoProfissional(
             Integer bairroId,
@@ -349,7 +301,7 @@ public class ProfissionalBairroService {
 
         // ▶ Validar dados do novo profissional
         validarDadosNovoProfissional(nomeProfissional, especialidade, numeroConselho,
-                                     telefone, email, endereco, cidadeProfissional);
+                telefone, email, endereco, cidadeProfissional);
 
         // ▶ Criar novo profissional
         Profissional novoProfissional = new Profissional();
@@ -370,25 +322,23 @@ public class ProfissionalBairroService {
         return novoProfissional;
     }
 
-
     // ========================================================================
-    // VALIDAÇÕES DE ENTRADA E REGRAS DE NEGÓCIO -> Valida se os IDs fornecidos são válidos (não nulos e maiores que zero).
+    // VALIDAÇÕES DE ENTRADA E REGRAS DE NEGÓCIO -> Valida se os IDs fornecidos são
+    // válidos (não nulos e maiores que zero).
     // ========================================================================
     private void validarIds(Integer profissionalId, Integer bairroId) {
         if (profissionalId == null || profissionalId <= 0) {
             throw new IllegalArgumentException(
-                "ID do profissional é obrigatório e deve ser maior que zero"
-            );
+                    "ID do profissional é obrigatório e deve ser maior que zero");
         }
 
         if (bairroId == null || bairroId <= 0) {
             throw new IllegalArgumentException(
-                "ID do bairro é obrigatório e deve ser maior que zero"
-            );
+                    "ID do bairro é obrigatório e deve ser maior que zero");
         }
     }
 
-    /* Valida dados básicos de um novo profissional antes de criação.*/
+    /* Valida dados básicos de um novo profissional antes de criação. */
     private void validarDadosNovoProfissional(String nome, String especialidade,
             String numeroConselho, String telefone, String email, String endereco, String cidade) {
 
@@ -424,35 +374,31 @@ public class ProfissionalBairroService {
     /* Valida se a associação entre profissional e bairro já não existe. */
     private void validarAssociacaoJaExistente(Profissional profissional, Bairro bairro) {
         boolean jaAssociado = profissional.getBairrosAtendidos().stream()
-            .anyMatch(b -> Objects.equals(b.getId(), bairro.getId()));
+                .anyMatch(b -> Objects.equals(b.getId(), bairro.getId()));
 
         if (jaAssociado) {
             throw new IllegalStateException(
-                String.format(
-                    "Profissional %d (%s) já está associado ao bairro %d (%s)",
-                    profissional.getId(), profissional.getNome(),
-                    bairro.getId(), bairro.getNome()
-                )
-            );
+                    String.format(
+                            "Profissional %d (%s) já está associado ao bairro %d (%s)",
+                            profissional.getId(), profissional.getNome(),
+                            bairro.getId(), bairro.getNome()));
         }
     }
 
-    
     // ========================================================================
-    // MÉTODOS AUXILIARES DE BUSCA -> Busca um profissional pelo ID ou lança exceção se não encontrar.
+    // MÉTODOS AUXILIARES DE BUSCA -> Busca um profissional pelo ID ou lança exceção
+    // se não encontrar.
     // ========================================================================
     private Profissional buscarProfissionalOuThrow(Integer profissionalId) {
         return profissionalRepository.findById(profissionalId)
-            .orElseThrow(() -> new ObjectNotFoundException(
-                "Profissional não encontrado com ID: " + profissionalId
-            ));
+                .orElseThrow(() -> new ObjectNotFoundException(
+                        "Profissional não encontrado com ID: " + profissionalId));
     }
 
-    /* Busca um bairro pelo ID ou lança exceção se não encontrar.*/
+    /* Busca um bairro pelo ID ou lança exceção se não encontrar. */
     private Bairro buscarBairroOuThrow(Integer bairroId) {
         return bairroRepository.findById(bairroId)
-            .orElseThrow(() -> new ObjectNotFoundException(
-                "Bairro não encontrado com ID: " + bairroId
-            ));
+                .orElseThrow(() -> new ObjectNotFoundException(
+                        "Bairro não encontrado com ID: " + bairroId));
     }
 }

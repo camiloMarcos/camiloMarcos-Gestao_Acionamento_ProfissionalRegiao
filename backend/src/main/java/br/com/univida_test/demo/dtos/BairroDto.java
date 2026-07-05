@@ -6,9 +6,7 @@ import br.com.univida_test.demo.models.Profissional;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
 
-
 public class BairroDto {
-
 
     private Integer id;
 
@@ -21,27 +19,24 @@ public class BairroDto {
     private String cidade;
 
     // boolean não precisa de @NotBlank (sempre tem valor padrão false)
-    private boolean perigo_Distante;
-
+    private boolean perigoDistante;
 
     private List<Profissional> profissionais;
 
+    public BairroDto() {
+    }
 
-        public BairroDto(){
-        }
-
-
-        public BairroDto(Integer id, String nome, String cidade, boolean perigo_Distante) {
-            this.id = id;
-            this.nome = nome;
-            this.cidade = cidade;
-            this.perigo_Distante = perigo_Distante;
-        }
-
+    public BairroDto(Integer id, String nome, String cidade, boolean perigoDistante) {
+        this.id = id;
+        this.nome = nome;
+        this.cidade = cidade;
+        this.perigoDistante = perigoDistante;
+    }
 
     public Integer getId() {
         return id;
     }
+
     public void setId(Integer id) {
         this.id = id;
     }
@@ -49,6 +44,7 @@ public class BairroDto {
     public String getNome() {
         return nome;
     }
+
     public void setNome(String nome) {
         this.nome = nome;
     }
@@ -56,20 +52,23 @@ public class BairroDto {
     public String getCidade() {
         return cidade;
     }
+
     public void setCidade(String cidade) {
         this.cidade = cidade;
     }
 
-    public boolean isPerigo_Distante() {
-        return perigo_Distante;
+    public boolean isPerigoDistante() {
+        return perigoDistante;
     }
-    public void setPerigo_Distante(boolean perigo_Distante) {
-        this.perigo_Distante = perigo_Distante;
+
+    public void setPerigoDistante(boolean perigoDistante) {
+        this.perigoDistante = perigoDistante;
     }
 
     public List<Profissional> getProfissionais() {
         return profissionais;
     }
+
     public void setProfissionais(List<Profissional> profissionais) {
         this.profissionais = profissionais;
     }
