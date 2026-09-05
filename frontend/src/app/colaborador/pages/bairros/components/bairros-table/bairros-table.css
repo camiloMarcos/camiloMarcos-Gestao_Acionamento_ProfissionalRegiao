@@ -19,8 +19,9 @@
     padding: 10px 10px; 
     text-align: left; 
     color: white; 
-    font-size: 0.8rem; 
+    font-size: var(--fonte-apoio, 14px); 
     font-weight: 600; 
+    line-height: 1.4;
     border-bottom: 1px solid #a0a0a0;
     letter-spacing: 0.2px;
     white-space: nowrap;
@@ -29,7 +30,8 @@
 .tabela td { 
     padding: 8px 10px; 
     border-bottom: 1px solid #d8d8d8; 
-    font-size: 0.9rem; 
+    font-size: var(--fonte-apoio, 14px); 
+    line-height: 1.5;
     vertical-align: middle;
     color: #333;
 }
