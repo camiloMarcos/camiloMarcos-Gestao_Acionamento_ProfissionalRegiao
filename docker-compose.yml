@@ -10,6 +10,8 @@ services:
     container_name: backend-gestao
     environment:
       SPRING_PROFILES_ACTIVE: docker
+    volumes:
+      - backend-data:/data
     healthcheck:
       test: ["CMD-SHELL", "curl -s http://localhost:8080 > /dev/null || exit 1"]
       interval: 10s
@@ -36,3 +38,6 @@ services:
 networks:
   app-network:
     driver: bridge
+
+volumes:
+  backend-data:

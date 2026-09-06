@@ -1,4 +1,13 @@
 <section class="bairro-detalhes-page">
+  @if (mensagem()) {
+    <div class="feedback-message" [class.success]="tipoMensagem() === 'sucesso'" [class.error]="tipoMensagem() === 'erro'" role="status">
+      <span class="material-icons-outlined" aria-hidden="true">
+        {{ tipoMensagem() === 'sucesso' ? 'check_circle' : 'error_outline' }}
+      </span>
+      <span>{{ mensagem() }}</span>
+    </div>
+  }
+
   <header class="page-header">
     <button class="btn-secondary voltar-btn" type="button" (click)="voltar()">
       <span class="material-icons-outlined" aria-hidden="true">arrow_back</span>
@@ -41,40 +50,112 @@
     </div>
 
     <section class="professionals-section" aria-labelledby="professionals-title">
-      <div class="section-heading">
-        <div>
-          <p class="page-eyebrow">Equipe de atendimento</p>
-          <h2 id="professionals-title">Profissionais vinculados</h2>
-        </div>
-      </div>
-
-      @if (profissionais().length > 0) {
-        <div class="data-table-container">
-          <table class="data-table">
-            <thead>
-              <tr>
-                <th>Nome</th>
-                <th>Especialidade</th>
-                <th>Cidade</th>
-              </tr>
-            </thead>
-            <tbody>
-              @for (profissional of profissionais(); track profissional.id) {
-                <tr>
-                  <td><strong>{{ profissional.nome }}</strong></td>
-                  <td>{{ profissional.especialidade }}</td>
-                  <td>{{ profissional.cidade }}</td>
-                </tr>
-              }
-            </tbody>
-          </table>
+      @if (erroProfissionais()) {
+        <div class="feedback-message error" role="alert">
+          <span class="material-icons-outlined" aria-hidden="true">error_outline</span>
+          <span>{{ erroProfissionais() }}</span>
         </div>
       } @else {
-        <div class="detail-state empty-state">
-          <span class="material-icons-outlined" aria-hidden="true">group_off</span>
-          <p>Nenhum profissional está vinculado a este bairro.</p>
-        </div>
+        <app-bairro-profissionais
+          [profissionais]="profissionais()"
+          (associar)="solicitarAssociacao()"
+          (remover)="solicitarRemocao($event)"
+        />
       }
     </section>
   }
 </section>
+
+<!-- Modal para escolher um profissional ainda não vinculado ao bairro. -->
+@if (modalAssociacaoAberto()) {
+  <div class="modal-backdrop" role="presentation" (click)="fecharModalAssociacao()">
+    <section class="association-modal" role="dialog" aria-modal="true" aria-labelledby="association-title" (click)="$event.stopPropagation()">
+      <div class="modal-header">
+        <div>
+          <p class="page-eyebrow">Relacionamento</p>
+          <h2 id="association-title">Associar profissional</h2>
+        </div>
+        <button class="modal-close" type="button" aria-label="Fechar" (click)="fecharModalAssociacao()">
+          <span class="material-icons-outlined" aria-hidden="true">close</span>
+        </button>
+      </div>
+
+      @if (carregandoDisponiveis()) {
+        <div class="detail-state" role="status">Carregando profissionais disponíveis...</div>
+      } @else if (profissionaisDisponiveis().length > 0) {
+        <div class="association-filters">
+          <label>
+            <span>Buscar por nome</span>
+            <input
+              type="search"
+              [value]="filtroNome()"
+              placeholder="Digite o nome"
+              (input)="atualizarFiltroNome($any($event.target).value)"
+            />
+          </label>
+          <label>
+            <span>Buscar por número do conselho</span>
+            <input
+              type="search"
+              [value]="filtroNumeroConselho()"
+              placeholder="Digite o número"
+              (input)="atualizarFiltroNumeroConselho($any($event.target).value)"
+            />
+          </label>
+        </div>
+
+        @if (profissionaisFiltrados().length > 0) {
+        <div class="professional-options" role="listbox" aria-label="Profissionais disponíveis">
+          @for (profissional of profissionaisFiltrados(); track profissional.id) {
+            <button
+              class="professional-option"
+              [class.selected]="profissionalSelecionadoId() === profissional.id"
+              type="button"
+              role="option"
+              [attr.aria-selected]="profissionalSelecionadoId() === profissional.id"
+              (click)="selecionarProfissional(profissional.id)"
+            >
+              <span>
+                <strong>{{ profissional.nome }}</strong>
+                <small>{{ profissional.especialidade }} · {{ profissional.cidade }}</small>
+              </span>
+              <span class="material-icons-outlined" aria-hidden="true">
+                {{ profissionalSelecionadoId() === profissional.id ? 'radio_button_checked' : 'radio_button_unchecked' }}
+              </span>
+            </button>
+          }
+        </div>
+        } @else {
+          <div class="detail-state empty-state">
+            <span class="material-icons-outlined" aria-hidden="true">search_off</span>
+            <p>Nenhum profissional corresponde aos filtros informados.</p>
+          </div>
+        }
+      } @else {
+        <div class="detail-state empty-state">
+          <span class="material-icons-outlined" aria-hidden="true">group_off</span>
+          <p>Não há profissionais disponíveis para associação.</p>
+        </div>
+      }
+
+      <div class="modal-actions">
+        <button class="btn-secondary" type="button" (click)="fecharModalAssociacao()">Cancelar</button>
+        <button class="btn-primary" type="button" [disabled]="!profissionalSelecionadoId() || associando()" (click)="confirmarAssociacao()">
+          @if (associando()) { Associando... } @else { Associar profissional }
+        </button>
+      </div>
+    </section>
+  </div>
+}
+
+@if (profissionalParaRemover(); as profissional) {
+  <app-confirm-modal
+    [titulo]="'Remover vínculo'"
+    [mensagem]="'Deseja remover ' + profissional.nome + ' deste bairro? O profissional continuará cadastrado no sistema.'"
+    textoConfirmar="Remover vínculo"
+    textoCancelar="Cancelar"
+    [perigo]="true"
+    (confirmar)="confirmarRemocao()"
+    (cancelar)="cancelarRemocao()"
+  />
+}

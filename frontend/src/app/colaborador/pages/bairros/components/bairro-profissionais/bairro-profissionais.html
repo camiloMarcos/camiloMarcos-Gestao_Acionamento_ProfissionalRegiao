@@ -1,0 +1,51 @@
+<!-- Tabela e ações dos profissionais vinculados ao bairro. -->
+<div class="section-heading">
+  <div>
+    <p class="page-eyebrow">Equipe de atendimento</p>
+    <h2 id="professionals-title">Profissionais vinculados</h2>
+  </div>
+  <button class="btn-primary" type="button" (click)="associar.emit()">
+    <span class="material-icons-outlined" aria-hidden="true">person_add</span>
+    Associar profissional
+  </button>
+</div>
+
+@if (profissionais().length > 0) {
+  <div class="data-table-container">
+    <table class="data-table">
+      <thead>
+        <tr>
+          <th class="col-nome">Nome</th>
+          <th class="col-especialidade">Especialidade</th>
+          <th class="col-cidade">Cidade</th>
+          <th class="col-acoes">Ações</th>
+        </tr>
+      </thead>
+      <tbody>
+        @for (profissional of profissionais(); track profissional.id) {
+          <tr>
+            <td class="col-nome"><strong>{{ profissional.nome }}</strong></td>
+            <td class="col-especialidade">{{ profissional.especialidade }}</td>
+            <td class="col-cidade">{{ profissional.cidade }}</td>
+            <td class="col-acoes">
+              <button
+                class="icon-btn unlink"
+                type="button"
+                title="Remover vínculo"
+                [attr.aria-label]="'Remover vínculo de ' + profissional.nome"
+                (click)="remover.emit(profissional.id)"
+              >
+                <span class="material-icons-outlined" aria-hidden="true">link_off</span>
+              </button>
+            </td>
+          </tr>
+        }
+      </tbody>
+    </table>
+  </div>
+} @else {
+  <div class="detail-state empty-state">
+    <span class="material-icons-outlined" aria-hidden="true">group_off</span>
+    <p>Nenhum profissional está vinculado a este bairro.</p>
+  </div>
+}

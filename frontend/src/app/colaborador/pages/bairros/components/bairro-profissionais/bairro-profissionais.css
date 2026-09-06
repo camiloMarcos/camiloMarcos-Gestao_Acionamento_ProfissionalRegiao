@@ -1,0 +1,112 @@
+/* Estilos da lista de profissionais vinculados ao bairro. */
+.section-heading {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-2);
+  margin-bottom: var(--space-2);
+}
+
+.page-eyebrow {
+  margin-bottom: var(--space-1);
+  color: var(--color-text-muted);
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+h2 {
+  margin: 0;
+  color: var(--color-primary);
+  font-size: 18px;
+  font-weight: 600;
+  line-height: 1.35;
+}
+
+.col-nome {
+  width: 30%;
+}
+
+.col-especialidade {
+  width: 30%;
+}
+
+.col-cidade {
+  width: 26%;
+}
+
+.col-acoes {
+  width: 96px;
+  min-width: 96px;
+  padding: 0 12px 0 8px;
+  text-align: right;
+  white-space: nowrap;
+}
+
+.data-table th.col-acoes {
+  text-align: center;
+}
+
+.icon-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 32px;
+  height: 32px;
+  padding: 0;
+  border: 0;
+  border-radius: 3px;
+  background: none;
+  color: #5e8790;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.icon-btn.unlink:hover,
+.icon-btn.unlink:focus-visible {
+  background-color: #f1f5f6;
+  color: #3f6f78;
+  outline: none;
+}
+
+.icon-btn:active {
+  transform: scale(0.92);
+}
+
+.detail-state {
+  padding: var(--space-3);
+  color: var(--color-text-secondary);
+  text-align: center;
+}
+
+.empty-state {
+  border: 1px dashed var(--color-border);
+  border-radius: var(--radius-sm);
+}
+
+.empty-state p {
+  margin: 0;
+}
+
+.empty-state .material-icons-outlined {
+  display: block;
+  margin-bottom: var(--space-1);
+  color: var(--color-text-muted);
+  font-size: 28px;
+}
+
+@media (max-width: 700px) {
+  .section-heading {
+    align-items: flex-start;
+    flex-direction: column;
+  }
+
+  .data-table-container {
+    overflow-x: auto;
+  }
+
+  .data-table {
+    min-width: 620px;
+  }
+}

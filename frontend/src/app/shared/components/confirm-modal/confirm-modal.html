@@ -1,0 +1,32 @@
+<!-- Janela reutilizável para confirmação de ações. -->
+<div class="confirm-backdrop" role="presentation" (click)="cancelar.emit()">
+  <section
+    class="confirm-modal"
+    [class.danger]="perigo()"
+    role="dialog"
+    aria-modal="true"
+    aria-labelledby="confirm-modal-title"
+    (click)="$event.stopPropagation()"
+  >
+    <div class="confirm-icon" aria-hidden="true">
+      <span class="material-icons-outlined">{{ perigo() ? 'warning' : 'help_outline' }}</span>
+    </div>
+    <div class="confirm-content">
+      <h2 id="confirm-modal-title">{{ titulo() }}</h2>
+      <p>{{ mensagem() }}</p>
+    </div>
+    <div class="confirm-actions">
+      <button class="btn-secondary" type="button" (click)="cancelar.emit()">
+        {{ textoCancelar() }}
+      </button>
+      <button
+        class="btn-primary"
+        [class.btn-danger]="perigo()"
+        type="button"
+        (click)="confirmar.emit()"
+      >
+        {{ textoConfirmar() }}
+      </button>
+    </div>
+  </section>
+</div>
