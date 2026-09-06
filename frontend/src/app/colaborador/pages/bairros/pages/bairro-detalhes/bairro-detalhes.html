@@ -1,0 +1,80 @@
+<section class="bairro-detalhes-page">
+  <header class="page-header">
+    <button class="btn-secondary voltar-btn" type="button" (click)="voltar()">
+      <span class="material-icons-outlined" aria-hidden="true">arrow_back</span>
+      Voltar para bairros
+    </button>
+    <p class="page-eyebrow">Detalhes do bairro</p>
+    <h1>{{ bairro()?.nome || 'Carregando bairro' }}</h1>
+    @if (bairro(); as bairroAtual) {
+      <p class="page-subtitle">{{ bairroAtual.cidade }}</p>
+      <button class="btn-secondary editar-btn" type="button" (click)="editarBairro()">
+        <span class="material-icons-outlined" aria-hidden="true">edit</span>
+        Editar bairro
+      </button>
+    }
+  </header>
+
+  @if (carregando()) {
+    <div class="detail-state" role="status">Carregando detalhes...</div>
+  } @else if (erro()) {
+    <div class="feedback-message error" role="alert">
+      <span class="material-icons-outlined" aria-hidden="true">error_outline</span>
+      <span>{{ erro() }}</span>
+    </div>
+  } @else if (bairro(); as bairroAtual) {
+    <div class="bairro-summary">
+      <div class="summary-item">
+        <span class="summary-label">Cidade</span>
+        <strong>{{ bairroAtual.cidade }}</strong>
+      </div>
+      <div class="summary-item">
+        <span class="summary-label">Segurança</span>
+        <span class="status-badge" [class.risk]="bairroAtual.perigoDistante">
+          {{ bairroAtual.perigoDistante ? 'Risco / Distante' : 'Seguro / Próximo' }}
+        </span>
+      </div>
+      <div class="summary-item">
+        <span class="summary-label">Profissionais vinculados</span>
+        <strong>{{ profissionais().length }}</strong>
+      </div>
+    </div>
+
+    <section class="professionals-section" aria-labelledby="professionals-title">
+      <div class="section-heading">
+        <div>
+          <p class="page-eyebrow">Equipe de atendimento</p>
+          <h2 id="professionals-title">Profissionais vinculados</h2>
+        </div>
+      </div>
+
+      @if (profissionais().length > 0) {
+        <div class="data-table-container">
+          <table class="data-table">
+            <thead>
+              <tr>
+                <th>Nome</th>
+                <th>Especialidade</th>
+                <th>Cidade</th>
+              </tr>
+            </thead>
+            <tbody>
+              @for (profissional of profissionais(); track profissional.id) {
+                <tr>
+                  <td><strong>{{ profissional.nome }}</strong></td>
+                  <td>{{ profissional.especialidade }}</td>
+                  <td>{{ profissional.cidade }}</td>
+                </tr>
+              }
+            </tbody>
+          </table>
+        </div>
+      } @else {
+        <div class="detail-state empty-state">
+          <span class="material-icons-outlined" aria-hidden="true">group_off</span>
+          <p>Nenhum profissional está vinculado a este bairro.</p>
+        </div>
+      }
+    </section>
+  }
+</section>

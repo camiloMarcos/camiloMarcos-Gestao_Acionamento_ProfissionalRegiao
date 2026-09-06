@@ -1,0 +1,132 @@
+.bairro-detalhes-page {
+  max-width: 1100px;
+  margin: 0 auto;
+}
+
+.page-header {
+  margin-bottom: var(--space-3);
+}
+
+.voltar-btn {
+  margin-bottom: var(--space-2);
+}
+
+.editar-btn {
+  margin-top: var(--space-2);
+}
+
+.page-eyebrow {
+  margin-bottom: var(--space-1);
+  color: var(--color-text-muted);
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.page-header h1,
+.section-heading h2 {
+  color: var(--color-primary);
+  font-weight: 600;
+  line-height: 1.35;
+}
+
+.page-header h1 {
+  font-size: var(--font-title);
+}
+
+.page-subtitle {
+  margin-top: 4px;
+  color: var(--color-text-secondary);
+  font-size: var(--font-subtitle);
+}
+
+.bairro-summary {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: var(--space-2);
+  margin-bottom: var(--space-3);
+}
+
+.summary-item {
+  min-height: 84px;
+  padding: var(--space-2);
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
+  box-shadow: var(--shadow-soft);
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: var(--space-1);
+}
+
+.summary-label {
+  color: var(--color-text-muted);
+  font-size: 12px;
+}
+
+.summary-item strong {
+  color: var(--color-text);
+  font-size: var(--font-subtitle);
+  font-weight: 600;
+}
+
+.status-badge {
+  width: fit-content;
+  padding: 4px 8px;
+  border-radius: 6px;
+  background: #f0f8f3;
+  color: var(--color-success);
+  font-size: var(--font-body);
+  font-weight: 500;
+}
+
+.status-badge.risk {
+  background: #fff6ed;
+  color: var(--color-warning);
+}
+
+.professionals-section {
+  padding: var(--space-3);
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
+  box-shadow: var(--shadow-soft);
+}
+
+.section-heading {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-2);
+  margin-bottom: var(--space-2);
+}
+
+.section-heading h2 {
+  font-size: 18px;
+}
+
+.detail-state {
+  padding: var(--space-3);
+  color: var(--color-text-secondary);
+  text-align: center;
+}
+
+.empty-state {
+  border: 1px dashed var(--color-border);
+  border-radius: var(--radius-sm);
+}
+
+.empty-state .material-icons-outlined {
+  display: block;
+  margin-bottom: var(--space-1);
+  color: var(--color-text-muted);
+  font-size: 28px;
+}
+
+@media (max-width: 700px) {
+  .bairro-summary {
+    grid-template-columns: 1fr;
+  }
+}

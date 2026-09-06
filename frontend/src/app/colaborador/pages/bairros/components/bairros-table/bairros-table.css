@@ -1,55 +1,3 @@
-/* ESTILOS ESPECÍFICOS DA TABELA DE BAIRROS - ESTÉTICA SAP/ERP */
-
-.tabela-container { 
-    background: white; 
-    border-radius: 0px; 
-    overflow: hidden; 
-    border: 1px solid #a0a0a0; 
-    box-shadow: none;
-}
-
-.tabela { 
-    width: 100%; 
-    border-collapse: collapse; 
-}
-
-/* ===== CABEÇALHO COM ESTILO AZUL-ACINZENTADO ===== */
-.tabela th { 
-    background: linear-gradient(90deg, #556b82 0%, #4a5f75 100%);
-    padding: 10px 10px; 
-    text-align: left; 
-    color: white; 
-    font-size: var(--fonte-apoio, 14px); 
-    font-weight: 600; 
-    line-height: 1.4;
-    border-bottom: 1px solid #a0a0a0;
-    letter-spacing: 0.2px;
-    white-space: nowrap;
-}
-
-.tabela td { 
-    padding: 8px 10px; 
-    border-bottom: 1px solid #d8d8d8; 
-    font-size: var(--fonte-apoio, 14px); 
-    line-height: 1.5;
-    vertical-align: middle;
-    color: #333;
-}
-
-/* Zebra Striping - Linhas alternadas */
-.tabela tbody tr:nth-child(odd) {
-    background-color: #ffffff;
-}
-
-.tabela tbody tr:nth-child(even) {
-    background-color: #f5f5f5;
-}
-
-/* Hover sobre as linhas */
-.tabela tbody tr:hover {
-    background-color: #eef3f9;
-}
-
 /* Largura das colunas - Proporções equilibradas */
 .col-id { 
     width: 6%; 
@@ -74,8 +22,10 @@
 }
 
 .col-acoes { 
-    width: 10%; 
-    text-align: center; 
+    width: 136px;
+    min-width: 136px;
+    text-align: right;
+    white-space: nowrap;
 }
 
 /* ===== INDICADOR VISUAL DE STATUS ===== */
@@ -135,33 +85,25 @@
 
 /* Botões de Ação na Tabela */
 .col-acoes {
-    display: flex;
-    justify-content: flex-start;
-    gap: 4px;
-    padding-left: 8px;
+    display: table-cell;
+    padding: 0 12px 0 8px;
 }
 
-.tabela th.col-acoes {
+.data-table th.col-acoes {
     text-align: center;
 }
 
 .icon-btn { 
     background: none; 
-    border: none; 
     cursor: pointer; 
-    color: #1976d2; 
-    padding: 4px 6px;
-    border-radius: 2px;
+    color: #5e8790;
     transition: all 0.2s ease;
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
     flex-shrink: 0;
 }
 
 .icon-btn:hover {
-    background-color: #f0f0f0;
-    color: #0d47a1;
+    background-color: #f1f5f6;
+    color: #3f6f78;
 }
 
 .icon-btn:active {
@@ -169,33 +111,28 @@
 }
 
 .icon-btn.view { 
-    color: #1976d2; 
+    color: #5e8790;
 }
 
 .icon-btn.view:hover {
-    background-color: #e3f2fd;
-    color: #0d47a1;
+    background-color: #f1f5f6;
+    color: #3f6f78;
 }
 
 .icon-btn.edit { 
-    color: #1976d2; 
+    color: #5e8790;
 }
 
 .icon-btn.edit:hover {
-    background-color: #e3f2fd;
-    color: #0d47a1;
+    background-color: #f1f5f6;
+    color: #3f6f78;
 }
 
 .icon-btn.delete { 
-    color: #d32f2f; 
+    color: #c77878;
 }
 
 .icon-btn.delete:hover {
-    background-color: #fff5f5;
-    color: #b71c1c;
-}
-
-.material-icons-outlined {
-    font-size: 18px;
-    font-variation-settings: 'FILL' 1;
+    background-color: #fff4f4;
+    color: #ae6262;
 }

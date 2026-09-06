@@ -14,33 +14,33 @@
       <p>{{ editando ? 'Altere os dados abaixo e salve.' : 'Preencha os dados abaixo para cadastrar.' }}</p>
     </div>
 
-    <div class="formulario-card">
+    <div class="form-card">
       <div class="form-grid">
         <!-- Campo: Nome do Bairro -->
         <div class="form-group">
           <label for="nome">Nome *</label>
-          <input id="nome" type="text" [(ngModel)]="bairro.nome" placeholder="Nome do bairro" required />
+          <input class="form-control" id="nome" type="text" [(ngModel)]="bairro.nome" placeholder="Nome do bairro" required />
         </div>
 
         <!-- Campo: Cidade -->
         <div class="form-group">
           <label for="cidade">Cidade *</label>
-          <input id="cidade" type="text" [(ngModel)]="bairro.cidade" placeholder="Nome da cidade" />
+          <input class="form-control" id="cidade" type="text" [(ngModel)]="bairro.cidade" placeholder="Nome da cidade" />
         </div>
 
         <!-- Campo: Checkbox de Risco (Ocupa a largura total) -->
         <div class="form-group" style="grid-column: 1 / -1">
-          <label for="perigo" class="checkbox-label">
+          <label for="perigo" class="form-check">
             <input type="checkbox" id="perigo" [(ngModel)]="bairro.perigoDistante" />
-            <span style="margin-left: 8px">Este bairro é uma área de risco?</span>
+            <span>Este bairro é uma área de risco?</span>
           </label>
         </div>
       </div>
 
       <!-- Rodapé de Ações do Formulário -->
-      <div class="form-acoes">
+      <div class="form-actions">
         <!-- Botão Principal: Salvar -->
-        <button class="btn-primario" (click)="onSalvar()" [disabled]="carregando">
+        <button class="btn-primary" (click)="onSalvar()" [disabled]="carregando">
           @if (carregando) {
             <span class="spinner"></span> Salvando...
           } @else {
@@ -50,13 +50,13 @@
         </button>
 
         <!-- Botão: Descartar -->
-        <button class="btn-secundario" (click)="onCancelar()">
+        <button class="btn-secondary" (click)="onCancelar()">
           <span class="material-icons-outlined">undo</span> Descartar
         </button>
 
         <!-- Botão Extra: Deletar (visível apenas em edição) -->
         @if (editando) {
-          <button class="btn-perigo" (click)="onDeletar()">
+          <button class="btn-danger" (click)="onDeletar()">
             <span class="material-icons-outlined">delete</span> Deletar Bairro
           </button>
         }

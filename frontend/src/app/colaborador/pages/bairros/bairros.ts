@@ -1,5 +1,6 @@
-import { Component, inject, signal } from '@angular/core';
+import { Component, OnInit, inject, signal } from '@angular/core';
 import { FormsModule } from '@angular/forms';
+import { ActivatedRoute, Router } from '@angular/router';
 import { BairroService } from '../../../core/services/bairro.service';
 import { Bairro } from '../../../core/models/bairro.model';
 import { BairrosTableComponent } from './components/bairros-table/bairros-table';
@@ -15,8 +16,30 @@ type TipoBuscaBairro = 'todos' | 'id' | 'nome-exato' | 'nome-parcial' | 'cidade'
   templateUrl: './bairros.html',
   styleUrl: './bairros.css',
 })
-export class Bairros {
+export class Bairros implements OnInit {
   private bairroService = inject(BairroService);
+  private route = inject(ActivatedRoute);
+  private router = inject(Router);
+
+  ngOnInit() {
+    const id = Number(this.route.snapshot.queryParamMap.get('edit'));
+
+    if (id > 0) {
+      this.carregando.set(true);
+      this.bairroService.buscarPorId(id).subscribe({
+        next: (bairro) => {
+          this.bairro = { ...bairro };
+          this.editando = true;
+          this.telaAtual.set('formulario');
+          this.carregando.set(false);
+        },
+        error: () => {
+          this.mostrarMensagem('Não foi possível carregar o bairro para edição.', 'erro');
+          this.carregando.set(false);
+        },
+      });
+    }
+  }
 
   // ========================
   // [S] ESTADOS REATIVOS (SIGNALS)
@@ -225,10 +248,9 @@ export class Bairros {
 
   visualizarBairro(bairroSelecionado: Bairro) {
     this.limparMensagem();
-    this.editando = false;
-    this.bairro = { ...bairroSelecionado };
-    // TODO: Implementar tela de visualização ou abrir em modo somente leitura
-    this.mostrarMensagem(`Visualizando: ${bairroSelecionado.nome}`, 'info');
+    if (bairroSelecionado.id) {
+      this.router.navigate(['/bairros', bairroSelecionado.id]);
+    }
   }
 
   editarBairro(bairroSelecionado: Bairro) {
